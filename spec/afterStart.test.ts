@@ -11,8 +11,6 @@ describe("after start a emulator", () => {
     if (avds.length === 0) {
       avdName = `TestCreate_${Math.random()}`;
       const images = (await android.listImages()).filter((item) => item.vendor === "default");
-      console.log("images");
-      console.log(images);
       if (images.length === 0) return;
       const image = images[images.length - 1].name;
       await android.createAVD({ name: avdName, package: image, force: false });
@@ -24,7 +22,7 @@ describe("after start a emulator", () => {
     if (emulatorId) {
       await android.ensureReady(emulatorId);
     }
-  }, 60000);
+  }, 120000);
 
   afterAll(async () => {
     await android.waitForStop(emulatorId);

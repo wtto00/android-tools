@@ -70,6 +70,8 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 120000) {
     matches: RegExpMatchArray;
     line: string;
   }>((resolve, reject) => {
+    console.log("command", command);
+
     const { cmd, args } = transformCommand(command);
     const proc = spawn(cmd, args, { stdio: ["ignore", "pipe", "ignore"] });
     const clock = setTimeout(() => {
@@ -78,6 +80,8 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 120000) {
     let output = "";
     proc.stdout.setEncoding("utf8");
     proc.stdout.on("data", (data: string) => {
+      console.log("data", command);
+
       output += data;
       let matches = data.match(regex);
       if (matches) {
