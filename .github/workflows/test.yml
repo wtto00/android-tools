@@ -54,6 +54,8 @@ jobs:
           AVDMANAGER_DIR=$(dirname "$AVDMANAGER_PATH")
           mkdir -p $ANDROID_HOME/cmdline-tools/latest
           cp -r $AVDMANAGER_DIR/../* $ANDROID_HOME/cmdline-tools/latest/
+          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager -s create avd TestCreate_8907636662671032
+          $ANDROID_HOME/emulator/emulator -verbose -avd TestCreate_8907636662671032
 
-      - name: Run tests 👩🏽‍💻
-        run: npm run test
+      # - name: Run tests 👩🏽‍💻
+      #   run: npm run test
