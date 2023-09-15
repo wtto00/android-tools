@@ -52,12 +52,12 @@ jobs:
         run: |
           AVDMANAGER_PATH=$(which avdmanager)
           echo $AVDMANAGER_PATH
-          AVDMANAGER_DIR="${AVDMANAGER_PATH%/../*}"
+          AVDMANAGER_DIR=$(dirname "$AVDMANAGER_PATH")
           echo $AVDMANAGER_DIR
           ls $AVDMANAGER_DIR
           mkdir $ANDROID_HOME/cmdline-tools
           mkdir $ANDROID_HOME/cmdline-tools/latest
-          cp -r $AVDMANAGER_DIR $ANDROID_HOME/cmdline-tools/latest/
+          cp -r $AVDMANAGER_DIR/../* $ANDROID_HOME/cmdline-tools/latest/
           ls $ANDROID_HOME/cmdline-tools/latest/
 
       - name: Run tests 👩🏽‍💻
