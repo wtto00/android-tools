@@ -226,6 +226,9 @@ class Android {
    * @param name name of AVD
    */
   async createAVD(options: CreateAVDOptions) {
+    if (options.package) {
+      await this.sdkmanager(options.package);
+    }
     const cmdParams = Object.keys(options).reduce((prev, curr) => {
       const val = options[curr as keyof CreateAVDOptions];
       if (typeof val === "boolean") {

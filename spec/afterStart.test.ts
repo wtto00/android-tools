@@ -11,8 +11,11 @@ describe("after start a emulator", () => {
     if (avds.length === 0) {
       avdName = `TestCreate_${Math.random()}`;
       const images = (await android.listImages()).filter((item) => item.vendor === "default");
+      console.log("images");
+      console.log(images);
       if (images.length === 0) return;
-      await android.createAVD({ name: avdName, package: images[images.length - 1].name, force: false });
+      const image = images[images.length - 1].name;
+      await android.createAVD({ name: avdName, package: image, force: false });
     } else {
       avdName = avds[0].Name;
     }
