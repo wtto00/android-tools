@@ -8,17 +8,19 @@ describe("after start a emulator", () => {
   beforeAll(async () => {
     const avds = await android.listAVDs();
     let avdName = "";
+    console.log("avds.length", avds.length);
+
     if (avds.length === 0) {
-      avdName = `TestCreate_${Math.random()}`;
+      avdName = `TestCreate_${Math.random().toString().substring(2)}`;
       const images = (await android.listImages()).filter((item) => item.vendor === "default");
       if (images.length === 0) return;
       const image = images[images.length - 1].name;
+      console.log("image", image);
+
       await android.createAVD({ name: avdName, package: image, force: false });
     } else {
       avdName = avds[0].Name;
     }
-    const avds1 = await android.listAVDs();
-    console.log("avds", avds1);
     const res = await android.start(avdName);
     emulatorId = res.id;
     if (emulatorId) {
