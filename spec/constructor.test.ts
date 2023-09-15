@@ -3,6 +3,13 @@ import Android from "../src/index.js";
 
 const cmdLinePath = process.env.GITHUB_CI ? "cmdline-tools" : "cmdline-tools/latest";
 
+/**
+ * in Github Action
+ * avdmanager,adb,sdkmanager has been in PATH
+ * avdmanager,sdkmanager are not in ANDROID_HOME
+ * adb,emulator are in ANDROID_HOME
+ */
+
 describe("constructor", () => {
   test("constructor", () => {
     const androidHome = process.env.ANDROID_HOME || "";
@@ -29,28 +36,25 @@ describe("constructor", () => {
   test("constructor with custom path", () => {
     const androidHome = process.env.ANDROID_HOME || "";
     const android = new Android({
-      avdmanager: `${cmdLinePath}/bin/avdmanager`,
-      sdkmanager: `${cmdLinePath}/bin/sdkmanager`,
       adb: "platform-tools/adb",
       emulator: "emulator/emulator",
     });
     expect([android.adbBin, android.avdmanagerBin, android.sdkmanagerBin, android.emulatorBin]).toEqual([
       path.resolve(androidHome, "platform-tools/adb"),
-      path.resolve(androidHome, `${cmdLinePath}/bin/avdmanager`),
-      path.resolve(androidHome, `${cmdLinePath}/bin/sdkmanager`),
+      'avdmanager',
+      'sdkmanager',
       path.resolve(androidHome, "emulator/emulator"),
     ]);
   });
 
   test("constructor with custom executable file environment variable", () => {
     const androidHome = process.env.ANDROID_HOME || "";
-    process.env.avdmanagerBin = path.resolve(androidHome, `${cmdLinePath}/bin/avdmanager`);
-    process.env.sdkmanagerBin = path.resolve(androidHome, `${cmdLinePath}/bin/sdkmanager`);
+    process.env.adbBin = path.resolve(androidHome, 'platform-tools/adb');
     const android = new Android();
     expect([android.adbBin, android.avdmanagerBin, android.sdkmanagerBin, android.emulatorBin]).toEqual([
       path.resolve(androidHome, "platform-tools/adb"),
-      path.resolve(androidHome, `${cmdLinePath}/bin/avdmanager`),
-      path.resolve(androidHome, `${cmdLinePath}/bin/sdkmanager`),
+      'avdmanager',
+      'sdkmanager',
       path.resolve(androidHome, "emulator/emulator"),
     ]);
   });

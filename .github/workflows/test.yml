@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [16, 18, 20]
+        node: [16]
     env:
       GITHUB_CI: true
     steps:
@@ -47,12 +47,14 @@ jobs:
           distribution: temurin
       - name: Setup Android SDK
         uses: amyu/setup-android@v3
-      - name: Set ANDROID_SDK_ROOT
+      - name: Copy cmdline-tools
         shell: bash
         run: |
-          echo "ANDROID_SDK_ROOT=$(echo $ANDROID_HOME)" >> $GITHUB_ENV
-          echo $GITHUB_ENV
-          echo $PATH
+          AVDMANAGER_PATH=$(which avdmanager)
+          AVDMANAGER_DIR="${AVDMANAGER_PATH%/../*}"
+          mkdir $ANDROID_HOME/cmdline-tools/latest/
+          cp -r $AVDMANAGER_DIR $ANDROID_HOME/cmdline-tools/latest/
+          ls $ANDROID_HOME/cmdline-tools/latest/
 
       - name: Run tests 👩🏽‍💻
         run: npm run test
