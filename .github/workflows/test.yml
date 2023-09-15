@@ -47,6 +47,12 @@ jobs:
           distribution: temurin
       - name: Setup Android SDK
         uses: amyu/setup-android@v3
+      - name: Set ANDROID_SDK_ROOT
+        shell: bash
+        run: |
+          echo "ANDROID_SDK_ROOT=$(echo $ANDROID_HOME)" >> $GITHUB_ENV
+          echo $GITHUB_ENV
+          echo $PATH
 
       - name: Run tests 👩🏽‍💻
         run: npm run test
