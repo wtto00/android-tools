@@ -19,7 +19,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-          cache: "npm"
+          cache: "pnpm"
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
       - name: Install Dependencies
         run: npm ci
 
