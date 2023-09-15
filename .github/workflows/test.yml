@@ -55,7 +55,7 @@ jobs:
           mkdir -p $ANDROID_HOME/cmdline-tools/latest
           cp -r $AVDMANAGER_DIR/../* $ANDROID_HOME/cmdline-tools/latest/
           $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "system-images;android-31;default;x86_64"
-          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager -s create avd TestCreate_8907636662671032
+          $ANDROID_HOME/cmdline-tools/latest/bin/avdmanager -s create avd -name TestCreate_8907636662671032 --package "system-images;android-31;default;x86_64"
           $ANDROID_HOME/emulator/emulator -verbose -avd TestCreate_8907636662671032
 
       # - name: Run tests 👩🏽‍💻
