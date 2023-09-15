@@ -221,7 +221,7 @@ class Android {
   }
 
   /**
-   * create a AVD based upon `image` (from `sdkmanager --list | grep system-images`)
+   * create a AVD based upon `image`
    * @param image android system image
    * @param name name of AVD
    */
@@ -283,7 +283,7 @@ class Android {
   /**
    * Install an APK located by absolute URI `apkPath` onto device with `emulatorId`.
    * @param emulatorId id of emulator
-   * @param apkPath path od apk file
+   * @param apkPath path of apk file
    */
   async install(emulatorId: string, apkPath: string) {
     const process = await this.adb(emulatorId, `install ${apkPath}`);
@@ -339,7 +339,7 @@ class Android {
   }
 
   /**
-   * List all AVDs created on this machine.
+   * List the available device list for creating emulators in the current system.
    */
   async listDevices() {
     const proc = await this.avdmanager("list device");
