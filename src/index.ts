@@ -134,7 +134,7 @@ class Android {
       if (execPath) {
         this.avdmanagerBin = path.resolve(process.env.ANDROID_HOME, execPath);
       } else if (!this.avdmanagerBin) {
-        this.avdmanagerBin = path.resolve(process.env.ANDROID_HOME, "./cmdline-tools/bin/avdmanager");
+        this.avdmanagerBin = path.resolve(process.env.ANDROID_HOME, "./cmdline-tools/latest/bin/avdmanager");
       }
     }
 
@@ -154,7 +154,7 @@ class Android {
       if (execPath) {
         this.sdkmanagerBin = path.resolve(process.env.ANDROID_HOME, execPath);
       } else if (!this.sdkmanagerBin) {
-        this.sdkmanagerBin = path.resolve(process.env.ANDROID_HOME, "./cmdline-tools/bin/sdkmanager");
+        this.sdkmanagerBin = path.resolve(process.env.ANDROID_HOME, "./cmdline-tools/latest/bin/sdkmanager");
       }
     }
     const regex = /Usage:/;
