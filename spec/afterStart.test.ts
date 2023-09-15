@@ -17,6 +17,8 @@ describe("after start a emulator", () => {
     } else {
       avdName = avds[0].Name;
     }
+    const avds1 = await android.listAVDs();
+    console.log("avds", avds1);
     const res = await android.start(avdName);
     emulatorId = res.id;
     if (emulatorId) {

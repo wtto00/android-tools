@@ -94,6 +94,7 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 120000) {
       }
     });
     proc.on("close", (code, signal) => {
+      console.log("error", proc.stderr);
       clearTimeout(clock);
       reject(Error(output));
     });
