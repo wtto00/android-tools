@@ -39,7 +39,6 @@ export function spawnExec(command: string, timeout = 60000) {
     proc.on("close", (code) => {
       clearTimeout(clock);
       if (code) {
-        console.log('proc.killed',proc.killed);
         reject(Error(error));
       } else {
         proc.output = output;
