@@ -12,7 +12,7 @@ describe("after start a emulator", () => {
 
     if (avds.length === 0) {
       avdName = `TestCreate_${Math.random().toString().substring(2)}`;
-      const images = (await android.listImages()).filter((item) => item.vendor === "default");
+      const images = (await android.listImages()).filter((item) => item.vendor === "default" && item.arch === "x86_64");
       if (images.length === 0) return;
       const image = images[images.length - 1].name;
       console.log("image", image);
@@ -30,7 +30,7 @@ describe("after start a emulator", () => {
 
   afterAll(async () => {
     await android.waitForStop(emulatorId);
-  }, 10000);
+  }, 60000);
 
   test("list packages", async () => {
     if (emulatorId) {

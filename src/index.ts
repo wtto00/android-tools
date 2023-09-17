@@ -227,7 +227,7 @@ class Android {
    */
   async createAVD(options: CreateAVDOptions) {
     if (options.package) {
-      await this.sdkmanager(options.package);
+      await this.sdkmanager(`--install ${options.package}`);
     }
     const cmdParams = Object.keys(options).reduce((prev, curr) => {
       const val = options[curr as keyof CreateAVDOptions];
