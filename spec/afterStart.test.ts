@@ -21,7 +21,7 @@ beforeAll(async () => {
   if (emulatorId) {
     await android.ensureReady(emulatorId);
   }
-}, 300000);
+}, 1200000);
 
 afterAll(async () => {
   await android.waitForStop(emulatorId);
