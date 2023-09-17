@@ -326,11 +326,30 @@ android
 
 ### listImages
 
-List available Android images on this machine.
+List available android images on this machine.
 
 ```js
 android
   .listImages()
+  .then((res) => {
+    res.forEach((item) => {
+      console.log(
+        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, vendor: ${item.vendor}, arch: ${item.arch}`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+```
+
+### listInstalledImages
+
+List installed android images on this machine.
+
+```js
+android
+  .listInstalledImages()
   .then((res) => {
     res.forEach((item) => {
       console.log(

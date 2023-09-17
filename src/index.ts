@@ -227,7 +227,7 @@ class Android {
    */
   async createAVD(options: CreateAVDOptions) {
     if (options.package) {
-      await this.sdkmanager(`--install ${options.package}`);
+      await this.sdkmanager(`--install ${options.package}`, 180000);
     }
     const cmdParams = Object.keys(options).reduce((prev, curr) => {
       const val = options[curr as keyof CreateAVDOptions];
@@ -374,37 +374,49 @@ class Android {
   }
 
   /**
+   * List installed Android images on this machine.
+   */
+  async listInstalledImages() {
+    const proc = await this.sdkmanager("--list_installed");
+    return filterGroupImages(proc.output);
+  }
+
+  /**
    * Use `adb` to execute commands.
    * @param emulatorId id of emulator
    * @param cmd command
+   * @param timeout Execution timeout
    */
-  adb(emulatorId: string, cmd?: string) {
-    if (cmd) return spawnExec(`${this.adbBin} -s ${emulatorId} ${cmd}`);
-    return spawnExec(`${this.adbBin} ${emulatorId}`);
+  adb(emulatorId: string, cmd?: string, timeout?: number) {
+    if (cmd) return spawnExec(`${this.adbBin} -s ${emulatorId} ${cmd}`, timeout);
+    return spawnExec(`${this.adbBin} ${emulatorId}`, timeout);
   }
 
   /**
    * Use `avdmanager` to execute commands.
    * @param cmd command
+   * @param timeout Execution timeout
    */
-  avdmanager(cmd: string) {
-    return spawnExec(`${this.avdmanagerBin} ${cmd}`);
+  avdmanager(cmd: string, timeout?: number) {
+    return spawnExec(`${this.avdmanagerBin} ${cmd}`, timeout);
   }
 
   /**
    * Use `sdkmanager` to execute commands.
    * @param cmd command
+   * @param timeout Execution timeout
    */
-  sdkmanager(cmd: string) {
-    return spawnExec(`${this.sdkmanagerBin} ${cmd}`);
+  sdkmanager(cmd: string, timeout?: number) {
+    return spawnExec(`${this.sdkmanagerBin} ${cmd}`, timeout);
   }
 
   /**
    * Use `emulator` to execute commands.
    * @param cmd command
+   * @param timeout Execution timeout
    */
-  emulator(cmd: string) {
-    return spawnExec(`${this.emulatorBin} ${cmd}`);
+  emulator(cmd: string, timeout?: number) {
+    return spawnExec(`${this.emulatorBin} ${cmd}`, timeout);
   }
 }
 

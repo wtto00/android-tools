@@ -343,6 +343,25 @@ android
   });
 ```
 
+### listInstalledImages
+
+列出已安装的所有安卓镜像。
+
+```js
+android
+  .listInstalledImages()
+  .then((res) => {
+    res.forEach((item) => {
+      console.log(
+        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, vendor: ${item.vendor}, arch: ${item.arch}`
+      );
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+```
+
 ### adb
 
 使用`adb`执行自定义命令。
