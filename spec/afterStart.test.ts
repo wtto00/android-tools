@@ -29,10 +29,11 @@ afterAll(async () => {
 
 describe("after start a emulator", () => {
   test("list packages", async () => {
-    console.log("emulatorId", emulatorId);
     if (emulatorId) {
       const list = await android.listPackages(emulatorId);
       expect(list.length).toBeGreaterThan(0);
+    } else {
+      expect(1).toBe(0);
     }
   });
 
@@ -40,6 +41,8 @@ describe("after start a emulator", () => {
     if (emulatorId) {
       const res = await android.isInstalled(emulatorId, "com.android.webview");
       expect(res).toBe(true);
+    } else {
+      expect(1).toBe(0);
     }
   });
 
@@ -49,6 +52,8 @@ describe("after start a emulator", () => {
       const res = await android.install(emulatorId, apk);
       expect(res).toBeUndefined();
       await android.adb(emulatorId, `uninstall com.appmaker.pwa2apk.pwa.androidapp`);
+    } else {
+      expect(1).toBe(0);
     }
   }, 60000);
 
@@ -57,6 +62,8 @@ describe("after start a emulator", () => {
       await expect(async () => {
         await android.install(emulatorId, "123123.apk");
       }).rejects.toThrow();
+    } else {
+      expect(1).toBe(0);
     }
   }, 30000);
 
