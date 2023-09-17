@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist && rollup -c",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --detectOpenHandles --verbose",
     "lint": "eslint --fix --color .",
     "format": "prettier . --write --ignore-unknown",
     "tscheck": "tsc --noEmit --pretty -p ./tsconfig.json",
