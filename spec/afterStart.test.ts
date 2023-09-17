@@ -1,38 +1,35 @@
 import path from "path";
 import Android from "../src/index.js";
 
+const android = new Android();
+
+let emulatorId = "";
+beforeAll(async () => {
+  const avds = await android.listAVDs();
+  let avdName = "";
+  if (avds.length === 0) {
+    avdName = `TestCreate_${Math.random().toString().substring(2)}`;
+    const images = (await android.listImages()).filter((item) => item.vendor === "default" && item.arch === "x86_64");
+    if (images.length === 0) return;
+    const image = images[images.length - 1].name;
+    await android.createAVD({ name: avdName, package: image, force: false });
+  } else {
+    avdName = avds[0].Name;
+  }
+  const res = await android.start(avdName);
+  emulatorId = res.id;
+  if (emulatorId) {
+    await android.ensureReady(emulatorId);
+  }
+}, 120000);
+
+afterAll(async () => {
+  await android.waitForStop(emulatorId);
+}, 60000);
+
 describe("after start a emulator", () => {
-  const android = new Android();
-
-  let emulatorId = "";
-  beforeAll(async () => {
-    const avds = await android.listAVDs();
-    let avdName = "";
-    console.log("avds.length", avds.length);
-
-    if (avds.length === 0) {
-      avdName = `TestCreate_${Math.random().toString().substring(2)}`;
-      const images = (await android.listImages()).filter((item) => item.vendor === "default" && item.arch === "x86_64");
-      if (images.length === 0) return;
-      const image = images[images.length - 1].name;
-      console.log("image", image);
-
-      await android.createAVD({ name: avdName, package: image, force: false });
-    } else {
-      avdName = avds[0].Name;
-    }
-    const res = await android.start(avdName);
-    emulatorId = res.id;
-    if (emulatorId) {
-      await android.ensureReady(emulatorId);
-    }
-  }, 120000);
-
-  afterAll(async () => {
-    await android.waitForStop(emulatorId);
-  }, 60000);
-
   test("list packages", async () => {
+    console.log("emulatorId", emulatorId);
     if (emulatorId) {
       const list = await android.listPackages(emulatorId);
       expect(list.length).toBeGreaterThan(0);
