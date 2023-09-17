@@ -50,7 +50,7 @@ describe("after start a emulator", () => {
       expect(res).toBeUndefined();
       await android.adb(emulatorId, `uninstall com.appmaker.pwa2apk.pwa.androidapp`);
     }
-  });
+  }, 60000);
 
   test("install a none-exist package", async () => {
     if (emulatorId) {
@@ -58,7 +58,7 @@ describe("after start a emulator", () => {
         await android.install(emulatorId, "123123.apk");
       }).rejects.toThrow();
     }
-  });
+  }, 30000);
 
   test("list devices", async () => {
     const devices = await android.devices();

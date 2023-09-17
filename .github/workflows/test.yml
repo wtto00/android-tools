@@ -16,27 +16,19 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
-          check-latest: true
-      - uses: pnpm/action-setup@v2
-        name: Install pnpm
-        with:
-          version: 8
-          run_install: false
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install
 
@@ -47,18 +39,7 @@ jobs:
           distribution: temurin
 
       - name: Setup Android SDK
-        uses: amyu/setup-android@552327940faf4a0fd9a812d241da3f1e975b9996
-
-      # Runs a set of commands using the runners shell
-      # - name: Run a multi-line script
-      #   run: |
-      #     uname -a
-      #     sdkmanager --install "system-images;android-31;default;x86_64"
-      #     /bin/bash -c yes | sdkmanager --licenses
-      #     avdmanager -s create avd -n Android_Emulator -k "system-images;android-31;default;x86_64"
-      #     avdmanager list avd
-      #     $ANDROID_HOME/emulator/emulator -list-avds
-      #     $ANDROID_HOME/emulator/emulator -verbose -avd Android_Emulator
+        uses: amyu/setup-android@v3.1
 
       - name: Run tests 👩🏽‍💻
         run: npm run test
