@@ -25,6 +25,7 @@ export function spawnExec(command: string, timeout = 60000) {
     };
     const clock = setTimeout(() => {
       console.log("timeout", timeout, command);
+      proc.kill();
       reject(Error("Execution timeout"));
     }, timeout);
     let output = "";
@@ -52,7 +53,7 @@ export function spawnExec(command: string, timeout = 60000) {
 /**
  * Execute a shell command synchronously.
  */
-export function spwanSyncExec(command: string, timeout = 6000) {
+export function spwanSyncExec(command: string, timeout = 60000) {
   const { cmd, args } = transformCommand(command);
   const clock = setTimeout(() => {
     throw Error("Execution timeout");
@@ -74,6 +75,7 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 120000) {
     const { cmd, args } = transformCommand(command);
     const proc = spawn(cmd, args, { stdio: ["ignore", "pipe", "ignore"] });
     const clock = setTimeout(() => {
+      proc.kill();
       reject(Error("Execution timeout"));
     }, timeout);
     let output = "";
