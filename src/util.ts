@@ -1,16 +1,16 @@
-import { spawn, spawnSync } from "node:child_process";
-import type { ChildProcessByStdio, ChildProcessWithoutNullStreams } from "node:child_process";
-import type internal from "node:stream";
+import { spawn, spawnSync } from 'node:child_process';
+import type { ChildProcessByStdio, ChildProcessWithoutNullStreams } from 'node:child_process';
+import type internal from 'node:stream';
 
 export function winBatAdapt(cmd: string) {
-  if (process.platform === "win32" && (cmd.endsWith("sdkmanager") || cmd.endsWith("avdmanager"))) {
+  if (process.platform === 'win32' && (cmd.endsWith('sdkmanager') || cmd.endsWith('avdmanager'))) {
     return `${cmd}.bat`;
   }
   return cmd;
 }
 
 export function transformCommand(command: string) {
-  const [cmd, ...args] = command.split(" ");
+  const [cmd, ...args] = command.split(' ');
   return { cmd: winBatAdapt(cmd), args: args.filter((arg) => arg) };
 }
 
@@ -24,21 +24,21 @@ export function spawnExec(command: string, timeout = 60000) {
       output: string;
     };
     const clock = setTimeout(() => {
-      console.log("timeout", timeout, command);
+      console.log('timeout', timeout, command);
       proc.kill();
-      reject(Error("Execution timeout"));
+      reject(Error('Execution timeout'));
     }, timeout);
-    let output = "";
-    proc.stdout.setEncoding("utf8");
-    proc.stdout.on("data", (data) => {
+    let output = '';
+    proc.stdout.setEncoding('utf8');
+    proc.stdout.on('data', (data) => {
       output += data;
     });
-    let error = "";
-    proc.stderr.setEncoding("utf8");
-    proc.stderr.on("data", (err) => {
+    let error = '';
+    proc.stderr.setEncoding('utf8');
+    proc.stderr.on('data', (err) => {
       error += err;
     });
-    proc.on("close", (code) => {
+    proc.on('close', (code) => {
       clearTimeout(clock);
       if (code) {
         reject(Error(error));
@@ -56,11 +56,11 @@ export function spawnExec(command: string, timeout = 60000) {
 export function spwanSyncExec(command: string, timeout = 60000) {
   const { cmd, args } = transformCommand(command);
   const clock = setTimeout(() => {
-    throw Error("Execution timeout");
+    throw Error('Execution timeout');
   }, timeout);
-  const res = spawnSync(cmd, args, { encoding: "utf8" });
+  const res = spawnSync(cmd, args, { encoding: 'utf8' });
   clearTimeout(clock);
-  return res.output.find((item) => item) || "";
+  return res.output.find((item) => item) ?? '';
 }
 
 /**
@@ -73,26 +73,26 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 120000) {
     line: string;
   }>((resolve, reject) => {
     const { cmd, args } = transformCommand(command);
-    const proc = spawn(cmd, args, { stdio: ["ignore", "pipe", "ignore"] });
+    const proc = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'ignore'] });
     const clock = setTimeout(() => {
       proc.kill();
-      reject(Error("Execution timeout"));
+      reject(Error('Execution timeout'));
     }, timeout);
-    let output = "";
-    proc.stdout.setEncoding("utf8");
-    proc.stdout.on("data", (data: string) => {
+    let output = '';
+    proc.stdout.setEncoding('utf8');
+    proc.stdout.on('data', (data: string) => {
       output += data;
-      let matches = data.match(regex);
+      const matches = data.match(regex);
       if (matches) {
         clearTimeout(clock);
         resolve({
           process: proc,
           matches: matches,
-          line: data,
+          line: data
         });
       }
     });
-    proc.on("close", (code, signal) => {
+    proc.on('close', () => {
       clearTimeout(clock);
       reject(Error(output));
     });
@@ -130,28 +130,26 @@ export async function retry(execFunc: () => Promise<boolean> | boolean, retries 
     );
     await retry(execFunc, retries - 1);
   } else {
-    throw Error("Already reached maximum retry times.");
+    throw Error('Already reached maximum retry times.');
   }
 }
 
-export function processKeyValueGroups<T extends object = {}>(str: string) {
-  const lines = str.split("\n");
+export function processKeyValueGroups<T extends object = object>(str: string) {
+  const lines = str.split('\n');
   let currentKey = {} as T;
   const results = [];
 
   lines.forEach(function (line) {
-    const matches = line.match(/([\w\/]+):\s(.*)/);
-    let key: keyof T;
-    let value: T[keyof T];
+    const matches = line.match(/([\w/]+):\s(.*)/);
 
     if (matches === null) {
       return;
     }
 
-    key = matches[1] as keyof T;
-    value = matches[2] as T[keyof T];
+    const key = matches[1] as keyof T;
+    const value = matches[2] as T[keyof T];
 
-    if (typeof currentKey[key] !== "undefined") {
+    if (typeof currentKey[key] !== 'undefined') {
       results.push(currentKey);
       currentKey = {} as T;
     }
@@ -167,19 +165,19 @@ export function processKeyValueGroups<T extends object = {}>(str: string) {
 }
 
 export function filterGroupImages(output: string) {
-  let lines = output.split("\n");
+  const lines = output.split('\n');
   return lines
-    .map((line) => line.split("|")[0].trim())
-    .filter((line) => line.startsWith("system-images;"))
+    .map((line) => line.split('|')[0].trim())
+    .filter((line) => line.startsWith('system-images;'))
     .map((name) => {
-      const [type, sdk, vendor, arch] = name.split(";");
+      const [type, sdk, vendor, arch] = name.split(';');
       return { name, type, sdk, vendor, arch };
     })
     .filter((item) => {
-      if (process.arch === "arm") return item.arch === "armeabi-v7a";
-      if (process.arch === "arm64") return item.arch === "arm64-v8a";
-      if (process.arch === "ia32") return item.arch === "x86";
-      if (process.arch === "x64") return item.arch === "x86_64";
+      if (process.arch === 'arm') return item.arch === 'armeabi-v7a';
+      if (process.arch === 'arm64') return item.arch === 'arm64-v8a';
+      if (process.arch === 'ia32') return item.arch === 'x86';
+      if (process.arch === 'x64') return item.arch === 'x86_64';
       return false;
     });
 }

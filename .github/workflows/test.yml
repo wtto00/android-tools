@@ -1,4 +1,4 @@
-name: "Test"
+name: 'Test'
 on:
   pull_request:
   push:
@@ -6,11 +6,34 @@ on:
       - main
 
 jobs:
+  Lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Run Lint
+        run: npm run lint
+
   Test:
     runs-on: macos-latest
     strategy:
       matrix:
-        node: [16]
+        node: [16, 18, 20]
     env:
       GITHUB_CI: true
     steps:

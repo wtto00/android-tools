@@ -1,15 +1,15 @@
-import path from "path";
-import Android from "../src/index.js";
+import path from 'path';
+import Android from '../src/index.js';
 
 const android = new Android();
 
-let emulatorId = "";
+let emulatorId = '';
 beforeAll(async () => {
   const avds = await android.listAVDs();
-  let avdName = "";
+  let avdName = '';
   if (avds.length === 0) {
     avdName = `TestCreate_${Math.random().toString().substring(2)}`;
-    const images = (await android.listImages()).filter((item) => item.vendor === "default" && item.arch === "x86_64");
+    const images = (await android.listImages()).filter((item) => item.vendor === 'default' && item.arch === 'x86_64');
     if (images.length === 0) return;
     const image = images[images.length - 1].name;
     await android.createAVD({ name: avdName, package: image, force: false });
@@ -27,8 +27,8 @@ afterAll(async () => {
   await android.waitForStop(emulatorId);
 }, 60000);
 
-describe("after start a emulator", () => {
-  test("list packages", async () => {
+describe('after start a emulator', () => {
+  test('list packages', async () => {
     if (emulatorId) {
       const list = await android.listPackages(emulatorId);
       expect(list.length).toBeGreaterThan(0);
@@ -37,47 +37,47 @@ describe("after start a emulator", () => {
     }
   });
 
-  test("isInstalled package", async () => {
+  test('isInstalled package', async () => {
     if (emulatorId) {
-      const res = await android.isInstalled(emulatorId, "com.android.webview");
+      const res = await android.isInstalled(emulatorId, 'com.android.webview');
       expect(res).toBe(true);
     } else {
       expect(1).toBe(0);
     }
   });
 
-  test("install package", async () => {
+  test('install package', async () => {
     if (emulatorId) {
-      const apk = path.resolve(__dirname, "pwa2apk.apk");
+      const apk = path.resolve(__dirname, 'pwa2apk.apk');
       const res = await android.install(emulatorId, apk);
       expect(res).toBeUndefined();
-      await android.adb(emulatorId, `uninstall com.appmaker.pwa2apk.pwa.androidapp`);
+      await android.adb(emulatorId, 'uninstall com.appmaker.pwa2apk.pwa.androidapp');
     } else {
       expect(1).toBe(0);
     }
   }, 60000);
 
-  test("install a none-exist package", async () => {
+  test('install a none-exist package', async () => {
     if (emulatorId) {
       await expect(async () => {
-        await android.install(emulatorId, "123123.apk");
+        await android.install(emulatorId, '123123.apk');
       }).rejects.toThrow();
     } else {
       expect(1).toBe(0);
     }
   }, 30000);
 
-  test("list devices", async () => {
+  test('list devices', async () => {
     const devices = await android.devices();
     expect(devices.findIndex((item) => item.name === emulatorId)).toBeGreaterThan(-1);
   });
 
-  test("adb with no emulatorId", async () => {
-    const res = await android.adb("shell pm list packages");
+  test('adb with no emulatorId', async () => {
+    const res = await android.adb('shell pm list packages');
     expect(res.output.length).toBeGreaterThan(0);
   });
 
-  test("input key event", async () => {
+  test('input key event', async () => {
     const res = await android.inputKeyEvent(emulatorId, 82);
     expect(res.output.length).toBe(0);
   });

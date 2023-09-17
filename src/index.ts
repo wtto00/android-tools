@@ -1,12 +1,12 @@
-import path from "path";
+import path from 'path';
 import {
   filterGroupImages,
   isExecExpectedResult,
   processKeyValueGroups,
   retry,
   spawnExec,
-  spawnWaitFor,
-} from "./util.js";
+  spawnWaitFor
+} from './util.js';
 
 export interface AndroidOptions {
   /** The location of the `adb` executable file relative to `ANDROID_HOME` */
@@ -19,7 +19,7 @@ export interface AndroidOptions {
   emulator?: string;
 }
 
-export type AndroidExecBin = "adbBin" | "avdmanagerBin" | "sdkmanagerBin" | "emulatorBin";
+export type AndroidExecBin = 'adbBin' | 'avdmanagerBin' | 'sdkmanagerBin' | 'emulatorBin';
 
 export interface CreateAVDOptions {
   /** Path to a shared SD card image, or size of a new sdcard for the new AVD. */
@@ -91,13 +91,13 @@ export interface AvdDevice {
 
 class Android {
   /** The location of the `adb` executable file */
-  adbBin: string = process.env.adbBin || "";
+  adbBin: string = process.env.adbBin ?? '';
   /** The location of the `avdmanager` executable file */
-  avdmanagerBin: string = process.env.avdmanagerBin || "";
+  avdmanagerBin: string = process.env.avdmanagerBin ?? '';
   /** The location of the `sdkmanager` executable file */
-  sdkmanagerBin: string = process.env.sdkmanagerBin || "";
+  sdkmanagerBin: string = process.env.sdkmanagerBin ?? '';
   /** The location of the `emulator` executable file */
-  emulatorBin: string = process.env.emulatorBin || "";
+  emulatorBin: string = process.env.emulatorBin ?? '';
 
   constructor(props?: AndroidOptions) {
     this.setAdbBinPath(props?.adb);
@@ -115,16 +115,17 @@ class Android {
       if (execPath) {
         this.adbBin = path.resolve(process.env.ANDROID_HOME, execPath);
       } else if (!this.adbBin) {
-        this.adbBin = path.resolve(process.env.ANDROID_HOME, "./platform-tools/adb");
+        this.adbBin = path.resolve(process.env.ANDROID_HOME, './platform-tools/adb');
       }
     }
     const regex = /Android Debug Bridge/;
     if (!this.adbBin || !isExecExpectedResult(this.adbBin, regex)) {
-      if (isExecExpectedResult("adb", regex)) {
-        this.adbBin = "adb";
+      if (isExecExpectedResult('adb', regex)) {
+        this.adbBin = 'adb';
       }
     }
   }
+
   /**
    * Set the location of the `avdmanager` executable file
    * @param execPath The location of the `avdmanager` executable file relative to `ANDROID_HOME`
@@ -134,17 +135,18 @@ class Android {
       if (execPath) {
         this.avdmanagerBin = path.resolve(process.env.ANDROID_HOME, execPath);
       } else if (!this.avdmanagerBin) {
-        this.avdmanagerBin = path.resolve(process.env.ANDROID_HOME, "./cmdline-tools/latest/bin/avdmanager");
+        this.avdmanagerBin = path.resolve(process.env.ANDROID_HOME, './cmdline-tools/latest/bin/avdmanager');
       }
     }
 
     const regex = /Usage:/;
     if (!this.avdmanagerBin || !isExecExpectedResult(this.avdmanagerBin, regex)) {
-      if (isExecExpectedResult("avdmanager", regex)) {
-        this.avdmanagerBin = "avdmanager";
+      if (isExecExpectedResult('avdmanager', regex)) {
+        this.avdmanagerBin = 'avdmanager';
       }
     }
   }
+
   /**
    * Set the location of the `sdkmanager` executable file
    * @param execPath The location of the `sdkmanager` executable file relative to `ANDROID_HOME`
@@ -154,16 +156,17 @@ class Android {
       if (execPath) {
         this.sdkmanagerBin = path.resolve(process.env.ANDROID_HOME, execPath);
       } else if (!this.sdkmanagerBin) {
-        this.sdkmanagerBin = path.resolve(process.env.ANDROID_HOME, "./cmdline-tools/latest/bin/sdkmanager");
+        this.sdkmanagerBin = path.resolve(process.env.ANDROID_HOME, './cmdline-tools/latest/bin/sdkmanager');
       }
     }
     const regex = /Usage:/;
     if (!this.sdkmanagerBin || !isExecExpectedResult(this.sdkmanagerBin, regex)) {
-      if (isExecExpectedResult("sdkmanager", regex)) {
-        this.sdkmanagerBin = "sdkmanager";
+      if (isExecExpectedResult('sdkmanager', regex)) {
+        this.sdkmanagerBin = 'sdkmanager';
       }
     }
   }
+
   /**
    * Set the location of the `emulator` executable file
    * @param execPath The location of the `emulator` executable file relative to `ANDROID_HOME`
@@ -173,13 +176,13 @@ class Android {
       if (execPath) {
         this.emulatorBin = path.resolve(process.env.ANDROID_HOME, execPath);
       } else if (!this.emulatorBin) {
-        this.emulatorBin = path.resolve(process.env.ANDROID_HOME, "./emulator/emulator");
+        this.emulatorBin = path.resolve(process.env.ANDROID_HOME, './emulator/emulator');
       }
     }
     const regex = /Android Emulator usage:/;
     if (!this.emulatorBin || !isExecExpectedResult(`${this.emulatorBin} --help`, regex)) {
-      if (isExecExpectedResult("emulator --help", regex)) {
-        this.emulatorBin = "emulator";
+      if (isExecExpectedResult('emulator --help', regex)) {
+        this.emulatorBin = 'emulator';
       }
     }
   }
@@ -196,7 +199,7 @@ class Android {
     );
     return {
       process: res.process,
-      id: "emulator-" + res.matches[1],
+      id: 'emulator-' + res.matches[1]
     };
   }
 
@@ -205,7 +208,7 @@ class Android {
    * @param emulatorId id of emulator
    */
   async waitForDevice(emulatorId: string) {
-    await this.adb(emulatorId, "wait-for-device");
+    await this.adb(emulatorId, 'wait-for-device');
   }
 
   /**
@@ -214,9 +217,9 @@ class Android {
    */
   async ensureReady(emulatorId: string) {
     await this.waitForDevice(emulatorId);
-    return await retry(async () => {
-      const proc = await this.adb(emulatorId, "shell getprop sys.boot_completed");
-      return proc.output.trim() === "1";
+    await retry(async () => {
+      const proc = await this.adb(emulatorId, 'shell getprop sys.boot_completed');
+      return proc.output.trim() === '1';
     }, 100);
   }
 
@@ -232,12 +235,12 @@ class Android {
     }
     const cmdParams = Object.keys(options).reduce((prev, curr) => {
       const val = options[curr as keyof CreateAVDOptions];
-      if (typeof val === "boolean") {
+      if (typeof val === 'boolean') {
         if (val) return `${prev} --${curr}`;
         else return prev;
       }
       return `${prev} --${curr} ${val}`;
-    }, "");
+    }, '');
     return await this.avdmanager(`-s create avd ${cmdParams}`);
   }
 
@@ -258,18 +261,18 @@ class Android {
    * Stop a certain emulator.
    * @param emulatorId Id of emulator.
    */
-  stop(emulatorId: string) {
-    return this.adb(emulatorId, "emu kill");
+  async stop(emulatorId: string) {
+    return await this.adb(emulatorId, 'emu kill');
   }
 
   /**
    * Wait until the device is stopped.
    */
-  waitForStop(emulatorId: string) {
-    return retry(async () => {
+  async waitForStop(emulatorId: string) {
+    await retry(async () => {
       await this.stop(emulatorId);
       const devices = await this.devices();
-      return !devices.some((device) => device.name === emulatorId && device.status === "device");
+      return !devices.some((device) => device.name === emulatorId && device.status === 'device');
     }, 100);
   }
 
@@ -280,7 +283,7 @@ class Android {
    */
   async isInstalled(emulatorId: string, packageName: string) {
     const packages = await this.listPackages(emulatorId);
-    let isInstalled = packages.indexOf(packageName) > -1;
+    const isInstalled = packages.includes(packageName);
     return isInstalled;
   }
 
@@ -292,7 +295,7 @@ class Android {
   async install(emulatorId: string, apkPath: string) {
     const process = await this.adb(emulatorId, `install ${apkPath}`);
     if (process.output.match(/Success/)) return;
-    throw new Error("Could not parse output of adb command");
+    throw new Error('Could not parse output of adb command');
   }
 
   /**
@@ -300,24 +303,24 @@ class Android {
    * @param emulatorId Id of emulator
    * @param key https://developer.android.com/reference/android/view/KeyEvent
    */
-  inputKeyEvent(emulatorId: string, key: number) {
-    return this.adb(emulatorId, "shell input keyevent " + key);
+  async inputKeyEvent(emulatorId: string, key: number) {
+    return await this.adb(emulatorId, 'shell input keyevent ' + key);
   }
 
   /**
    * List connected devices
    */
   async devices() {
-    const proc = await this.adb("devices");
-    let lines = proc.output.split("\n");
+    const proc = await this.adb('devices');
+    const lines = proc.output.split('\n');
     lines.shift();
     return lines
       .map((line) => {
-        let matches = line.match(/([^\s]+)\s+([^\s]+)/);
+        const matches = line.match(/([^\s]+)\s+([^\s]+)/);
         if (matches === null) return null;
         return {
           name: matches[1],
-          status: matches[2],
+          status: matches[2]
         };
       })
       .filter((x) => x !== null) as Device[];
@@ -328,11 +331,11 @@ class Android {
    * @param emulatorId id of emulator
    */
   async listPackages(emulatorId: string) {
-    const proc = await this.adb(emulatorId, "shell pm list packages");
-    let lines = proc.output.split("\n");
+    const proc = await this.adb(emulatorId, 'shell pm list packages');
+    const lines = proc.output.split('\n');
     return lines
       .map((line) => {
-        return line.split(":")[1];
+        return line.split(':')[1];
       })
       .filter((pkg) => {
         return pkg;
@@ -346,7 +349,7 @@ class Android {
    * List the available device list for creating emulators in the current system.
    */
   async listDevices() {
-    const proc = await this.avdmanager("list device");
+    const proc = await this.avdmanager('list device');
     return processKeyValueGroups<AvdDevice>(proc.output);
   }
 
@@ -354,7 +357,7 @@ class Android {
    * List all AVDs created on this machine.
    */
   async listAVDs() {
-    const proc = await this.avdmanager("list avd");
+    const proc = await this.avdmanager('list avd');
     return processKeyValueGroups<Avd>(proc.output);
   }
 
@@ -362,7 +365,7 @@ class Android {
    * List available Android targets.
    */
   async listTargets() {
-    const proc = await this.avdmanager("list target");
+    const proc = await this.avdmanager('list target');
     return processKeyValueGroups<AvdTarget>(proc.output);
   }
 
@@ -370,7 +373,7 @@ class Android {
    * List available Android images on this machine.
    */
   async listImages() {
-    const proc = await this.sdkmanager("--list");
+    const proc = await this.sdkmanager('--list');
     return filterGroupImages(proc.output);
   }
 
@@ -378,7 +381,7 @@ class Android {
    * List installed Android images on this machine.
    */
   async listInstalledImages() {
-    const proc = await this.sdkmanager("--list_installed");
+    const proc = await this.sdkmanager('--list_installed');
     return filterGroupImages(proc.output);
   }
 
@@ -388,9 +391,9 @@ class Android {
    * @param cmd command
    * @param timeout Execution timeout
    */
-  adb(emulatorId: string, cmd?: string, timeout?: number) {
-    if (cmd) return spawnExec(`${this.adbBin} -s ${emulatorId} ${cmd}`, timeout);
-    return spawnExec(`${this.adbBin} ${emulatorId}`, timeout);
+  async adb(emulatorId: string, cmd?: string, timeout?: number) {
+    if (cmd) return await spawnExec(`${this.adbBin} -s ${emulatorId} ${cmd}`, timeout);
+    return await spawnExec(`${this.adbBin} ${emulatorId}`, timeout);
   }
 
   /**
@@ -398,8 +401,8 @@ class Android {
    * @param cmd command
    * @param timeout Execution timeout
    */
-  avdmanager(cmd: string, timeout?: number) {
-    return spawnExec(`${this.avdmanagerBin} ${cmd}`, timeout);
+  async avdmanager(cmd: string, timeout?: number) {
+    return await spawnExec(`${this.avdmanagerBin} ${cmd}`, timeout);
   }
 
   /**
@@ -407,8 +410,8 @@ class Android {
    * @param cmd command
    * @param timeout Execution timeout
    */
-  sdkmanager(cmd: string, timeout?: number) {
-    return spawnExec(`${this.sdkmanagerBin} ${cmd}`, timeout);
+  async sdkmanager(cmd: string, timeout?: number) {
+    return await spawnExec(`${this.sdkmanagerBin} ${cmd}`, timeout);
   }
 
   /**
@@ -416,8 +419,8 @@ class Android {
    * @param cmd command
    * @param timeout Execution timeout
    */
-  emulator(cmd: string, timeout?: number) {
-    return spawnExec(`${this.emulatorBin} ${cmd}`, timeout);
+  async emulator(cmd: string, timeout?: number) {
+    return await spawnExec(`${this.emulatorBin} ${cmd}`, timeout);
   }
 }
 

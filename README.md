@@ -1,6 +1,10 @@
 # android-tools
 
+[![Test](https://github.com/wtto00/android-tools/actions/workflows/test.yml/badge.svg)](https://github.com/wtto00/android-tools/actions/workflows/test.yml)
+
 Node module for managing and controlling the Android Devices.
+
+English | [简体中文](./README-ZH_CN.md)
 
 ## Install
 
@@ -11,7 +15,7 @@ npm i @wtto00/android-tools
 ## Usage
 
 ```js
-import Android from "@wtto00/android-tools";
+import Android from '@wtto00/android-tools';
 
 const options = {
   // adb: "platform-tools/adb",
@@ -36,7 +40,7 @@ Start the emulator using the AVD supplied through with `avdName`.
 
 ```js
 android
-  .start("android-avd-name")
+  .start('android-avd-name')
   .then((res) => {
     console.log(`emulatorId: ${res.id}`);
   })
@@ -55,9 +59,9 @@ Waiting for the simulator device to become available.
 
 ```js
 android
-  .waitForDevice("emulator-id")
+  .waitForDevice('emulator-id')
   .then(() => {
-    console.log("available");
+    console.log('available');
   })
   .catch((err) => {
     console.log(err);
@@ -74,9 +78,9 @@ Ensure device has been started and ready.
 
 ```js
 android
-  .ensureReady("emulator-id")
+  .ensureReady('emulator-id')
   .then(() => {
-    console.log("ready");
+    console.log('ready');
   })
   .catch((err) => {
     console.log(err);
@@ -95,11 +99,11 @@ Create a AVD based upon `image`.
 android
   .createAVD({
     name: avdName,
-    package: "android-image-name",
-    force: false,
+    package: 'android-image-name',
+    force: false
   })
   .then(() => {
-    console.log("has been created");
+    console.log('has been created');
   })
   .catch((err) => {
     console.log(err);
@@ -124,9 +128,9 @@ Check if a specific AVD has been created on this machine.
 
 ```js
 android
-  .hasAVD("android-avd-name")
+  .hasAVD('android-avd-name')
   .then((res) => {
-    console.log(res ? "has been created" : "not exist");
+    console.log(res ? 'has been created' : 'not exist');
   })
   .catch((err) => {
     console.log(err);
@@ -143,9 +147,9 @@ Stop a certain emulator.
 
 ```js
 android
-  .stop("emulator-id")
+  .stop('emulator-id')
   .then(() => {
-    console.log("has sent stop command");
+    console.log('has sent stop command');
   })
   .catch((err) => {
     console.log(err);
@@ -162,9 +166,9 @@ Wait until the device is stopped.
 
 ```js
 android
-  .waitForStop("emulator-id")
+  .waitForStop('emulator-id')
   .then(() => {
-    console.log("has been stopped");
+    console.log('has been stopped');
   })
   .catch((err) => {
     console.log(err);
@@ -181,9 +185,9 @@ Check the package specified with `packageName` is installed or not.
 
 ```js
 android
-  .isInstalled("emulator-id", "com.android.webview")
+  .isInstalled('emulator-id', 'com.android.webview')
   .then((res) => {
-    console.log(res ? "installed" : "not installed");
+    console.log(res ? 'installed' : 'not installed');
   })
   .catch((err) => {
     console.log(err);
@@ -201,9 +205,9 @@ Install an APK located by absolute URI `apkPath` onto device with `emulatorId`.
 
 ```js
 android
-  .isInstalled("emulator-id", "/path/to/apk")
+  .isInstalled('emulator-id', '/path/to/apk')
   .then(() => {
-    console.log("installed");
+    console.log('installed');
   })
   .catch((err) => {
     console.log(err);
@@ -221,9 +225,9 @@ adb shell input keyevent.
 
 ```js
 android
-  .inputKeyEvent("emulator-id", 82)
+  .inputKeyEvent('emulator-id', 82)
   .then(() => {
-    console.log("has send key");
+    console.log('has send key');
   })
   .catch((err) => {
     console.log(err);
@@ -258,7 +262,7 @@ List packages installed on the emulator with `emulatorId`.
 
 ```js
 android
-  .listPackages("emulator-id")
+  .listPackages('emulator-id')
   .then((res) => {
     res.forEach((item) => {
       console.log(item);
@@ -316,7 +320,7 @@ android
   .listTargets()
   .then((res) => {
     res.forEach((item) => {
-      console.log(`id: ${item.id}, Name: ${item.Name}, Type: ${item.Type}, API level: ${item["API level"]}`);
+      console.log(`id: ${item.id}, Name: ${item.Name}, Type: ${item.Type}, API level: ${item['API level']}`);
     });
   })
   .catch((err) => {
@@ -368,7 +372,7 @@ Use `adb` to execute commands.
 
 ```js
 android
-  .adb("emulator-id", "shell pm list packages")
+  .adb('emulator-id', 'shell pm list packages')
   .then((res) => {
     console.log(res.output);
   })
@@ -387,7 +391,7 @@ Use `avdmanager` to execute commands.
 
 ```js
 android
-  .avdmanager("list avd")
+  .avdmanager('list avd')
   .then((res) => {
     console.log(res.output);
   })
@@ -406,7 +410,7 @@ Use `sdkmanager` to execute commands.
 
 ```js
 android
-  .sdkmanager("--list")
+  .sdkmanager('--list')
   .then((res) => {
     console.log(res.output);
   })
@@ -425,7 +429,7 @@ Use `emulator` to execute commands.
 
 ```js
 android
-  .emulator("--help")
+  .emulator('--help')
   .then((res) => {
     console.log(res.output);
   })
