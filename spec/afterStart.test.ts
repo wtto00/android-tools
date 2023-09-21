@@ -16,7 +16,14 @@ beforeAll(async () => {
   } else {
     avdName = avds[0].Name;
   }
-  const res = await android.start(avdName);
+  const res = await android.start({
+    avd: avdName,
+    verbose: true,
+    noaudio: true,
+    noBootAnim: true,
+    noSnapshot: true,
+    noWindow: true
+  });
   emulatorId = res.id;
   if (emulatorId) {
     await android.ensureReady(emulatorId);

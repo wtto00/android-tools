@@ -64,8 +64,6 @@ jobs:
 
       - name: Setup Android SDK
         uses: amyu/setup-android@v3.1
-        with:
-          cache-disabled: true
 
       - name: Run tests 👩🏽‍💻
         run: npm run test

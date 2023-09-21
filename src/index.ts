@@ -7,6 +7,7 @@ import {
   spawnExec,
   spawnWaitFor
 } from './util.js';
+import { EmulatorOptions } from './emulator.js';
 
 export interface AndroidOptions {
   /** The location of the `adb` executable file relative to `ANDROID_HOME` */
@@ -190,11 +191,21 @@ class Android {
   /**
    * Start the emulator using the AVD supplied through with `avdName`.
    * Returns a promise that is resolved with an object that has the following properties.
-   * @param {string} avdName
+   * @param options
    */
-  async start(avdName: string) {
+  async start(options: Required<Pick<EmulatorOptions, 'avd' | 'verbose'>> & Omit<EmulatorOptions, 'avd' | 'verbose'>) {
+    const opts = [];
+    for (const key in options) {
+      const val = options[key as keyof EmulatorOptions];
+      const cliKey = '-' + key.replace(/[A-Z]/g, (matched) => `-${matched.toLocaleLowerCase()}`);
+      if (val === true) {
+        opts.push(cliKey);
+      } else if (val) {
+        opts.push(cliKey, val);
+      }
+    }
     const res = await spawnWaitFor(
-      `${this.emulatorBin} -verbose -avd ${avdName}`,
+      `${this.emulatorBin} ${opts.join(' ')}`,
       / control console listening on port (\d+), ADB on port \d+/
     );
     return {
