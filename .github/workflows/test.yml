@@ -29,8 +29,9 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
+        # runs-on: macos-latest
   Test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     needs: Lint
     strategy:
       matrix:
@@ -65,5 +66,8 @@ jobs:
       - name: Setup Android SDK
         uses: amyu/setup-android@v3.1
 
+      - name: Start Xvfb
+        run: Xvfb :99 &
+
       - name: Run tests 👩🏽‍💻
-        run: npm run test
+        run: DISPLAY=:99 npm run test
