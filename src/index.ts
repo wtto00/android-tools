@@ -219,7 +219,7 @@ class Android {
    * @param emulatorId id of emulator
    */
   async waitForDevice(emulatorId: string) {
-    await this.adb(emulatorId, 'wait-for-device');
+    await this.adb(emulatorId, 'wait-for-device', 300000);
   }
 
   /**
