@@ -1,4 +1,8 @@
 export interface EmulatorOptions {
+  /** use a specific android virtual device */
+  avd?: string;
+  /** enable specific debug messages */
+  verbose?: boolean;
   /** disable graphical window display */
   noWindow?: boolean;
   /** perform a full boot and do not auto-save, but qemu vmload and vmsave operate on snapstorage */
@@ -37,10 +41,6 @@ export interface EmulatorOptions {
   wipeData?: boolean;
   /** disable passive gps updates */
   noPassiveGps?: boolean;
-  /** use a specific android virtual device */
-  avd?: string;
-  /** enable specific debug messages */
-  verbose?: boolean;
 }
 
 /**

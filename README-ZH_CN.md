@@ -40,7 +40,11 @@ Andorid Options
 
 ```js
 android
-  .start('android-avd-name')
+  .start(
+    avd: 'android-avd-name',
+    verbose: true
+    // ...
+  )
   .then((res) => {
     console.log(`emulatorId: ${res.id}`);
   })
@@ -49,9 +53,29 @@ android
   });
 ```
 
-| field   | type   | required | default | note       |
-| ------- | ------ | -------- | ------- | ---------- |
-| avdName | string | true     | -       | 模拟器名称 |
+| field                | type                                                                           | required | default | note                                                               |
+| -------------------- | ------------------------------------------------------------------------------ | -------- | ------- | ------------------------------------------------------------------ |
+| avd                  | string                                                                         | true     | -       | 使用特定的android虚拟设备                                          |
+| verbose              | boolean                                                                        | true     | -       | 启用特定的调试消息                                                 |
+| noWindow             | boolean                                                                        | false    | -       | 禁用图形窗口显示                                                   |
+| noSnapshot           | boolean                                                                        | false    | -       | 执行完全引导，不自动保存，但qemu vmload和vmsave在snapstorage上操作 |
+| noSnapstorage        | boolean                                                                        | false    | -       | 不要装载快照存储文件（这将禁用所有快照功能）                       |
+| noSnapshotUpdateTime | boolean                                                                        | false    | -       | 在还原时不要尝试更正快照时间                                       |
+| noSnapshotSave       | boolean                                                                        | false    | -       | 退出时不自动保存到快照：放弃已更改的状态                           |
+| noSnapshotLoad       | boolean                                                                        | false    | -       | 不要从快照自动启动：执行完全启动                                   |
+| cameraBack           | "emulated","virtualscene","videoplayback","none","webcam<N>"                   | false    | -       | 为背面的相机设置模拟模式                                           |
+| cameraFront          | 'emulated','webcam<N>','none'                                                  | false    | -       | 为前置摄像头设置模拟模式                                           |
+| gpu                  | 'auto','auto-no-window','host','swiftshader_indirect','angle_indirect','guest' | false    | 'auto'  | 设置硬件OpenGLES仿真模式                                           |
+| nocache              | boolean                                                                        | false    | -       | 禁用缓存分区                                                       |
+| noaudio              | boolean                                                                        | false    | -       | 禁用音频支持                                                       |
+| noBootAnim           | boolean                                                                        | false    | -       | 禁用动画以加快启动速度                                             |
+| lowram               | boolean                                                                        | false    | -       | 该设备是一种低ram设备                                              |
+| restartWhenStalled   | boolean                                                                        | false    | -       | 允许在来宾停止时重新启动。                                         |
+| waitForDebugger      | boolean                                                                        | false    | -       | 启动时暂停，等待调试器进程附加后再继续                             |
+| httpProxy            | string                                                                         | false    | -       | 通过HTTP/HTTPS代理进行TCP连接                                      |
+| cores                | number                                                                         | false    | -       | 将CPU核心数设置为模拟器                                            |
+| wipeData             | boolean                                                                        | false    | -       | 重置用户数据映像（从initdata复制）                                 |
+| noPassiveGps         | boolean                                                                        | false    | -       | 禁用被动gps更新                                                    |
 
 ### waitForDevice
 
