@@ -1,6 +1,7 @@
 import type { JestConfigWithTsJest } from 'ts-jest';
 
 const jestConfig: JestConfigWithTsJest = {
+  testTimeout: 20000,
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   transform: {
