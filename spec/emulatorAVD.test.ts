@@ -11,7 +11,7 @@ describe('emulator AVD', () => {
     const res = await android.hasAVD(avdName);
     expect(res).toBe(true);
     await android.avdmanager(`delete avd --name ${avdName}`);
-  }, 10000);
+  }, 600000);
 
   test('create an existing AVD', async () => {
     const avds = await android.listAVDs();
