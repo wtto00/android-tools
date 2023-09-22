@@ -66,8 +66,5 @@ jobs:
       - name: Setup Android SDK
         uses: amyu/setup-android@v3.1
 
-      - name: Start Xvfb
-        run: Xvfb :99 &
-
       - name: Run tests 👩🏽‍💻
-        run: DISPLAY=:99 npm run test
+        run: npm run test
