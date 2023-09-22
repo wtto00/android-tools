@@ -41,6 +41,27 @@ export interface EmulatorOptions {
   wipeData?: boolean;
   /** disable passive gps updates */
   noPassiveGps?: boolean;
+  /** Disables acceleration entirely. Mostly useful for debugging. */
+  noAccel?: boolean;
+}
+
+export enum SystemImageTarget {
+  DEFAULT = 'default',
+  GOOGLE_APIS = 'google_apis',
+  PLAYSTORE = 'playstore',
+  ANDROID_WEAR = 'android-wear',
+  android_wear_cn = 'android-wear-cn',
+  android_tv = 'android-tv',
+  google_tv = 'google-tv',
+  AOSP_ATD = 'aosp_atd',
+  GOOGLE_ATD = 'google_atd'
+}
+
+export enum Arch {
+  X86 = 'x86',
+  X86_64 = 'x86_64',
+  ARM64_V8A = 'arm64-v8a',
+  ARMEABI_V7A = 'armeabi-v7a'
 }
 
 /**

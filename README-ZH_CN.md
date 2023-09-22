@@ -134,17 +134,16 @@ android
   });
 ```
 
-| field   | type    | required | default | note                                                                                    |
-| ------- | ------- | -------- | ------- | --------------------------------------------------------------------------------------- |
-| sdcard  | string  | false    | -       | 共享 SD 卡镜像的路径，或者为新模拟器选择一个新的 SD 卡大小。                            |
-| tag     | string  | false    | -       | 用于模拟器的 sys-img 标签。默认情况下，如果平台只有一个标签用于其系统镜像，则自动选择。 |
-| path    | string  | false    | -       | 新的模拟器将创建在哪个目录位置。                                                        |
-| package | string  | true     | -       | 此模拟器的系统镜像的路径（例如 'system-images;android-19;google_apis;x86'）。           |
-| name    | string  | false    | -       | 新模拟器的名称。                                                                        |
-| skin    | string  | false    | -       | 此设备可选择使用的皮肤名称。                                                            |
-| force   | boolean | false    | -       | 创建虚拟设备（覆盖现有的模拟器）。                                                      |
-| abi     | string  | false    | -       | 如果平台的系统镜像只有一个 ABI，则默认为自动选择 ABI 来使用模拟器。                     |
-| device  | string  | false    | -       | 可选的要使用的设备定义。可以是设备索引或 id。                                           |
+| field    | type                                                                                                                                           | required | default   | note                                                                                |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | ----------------------------------------------------------------------------------- |
+| apiLevel | number                                                                                                                                         | false    | -         | 平台系统镜像的API级别 - 例如，Android Marshmallow的级别为23，Android 10的级别为29。 |
+| target   | 'default'<br>'google_apis'<br>'playstore'<br>'android-wear'<br>'android-wear-cn'<br>'android-tv'<br>'google-tv'<br>'aosp_atd '<br>'google_atd' | false    | 'default' | 系统镜像的目标。                                                                    |
+| arch     | 'x86_64'<br>'x86'<br>'arm64-v8a'<br>'armeabi-v7a'                                                                                              | false    | 'x86_64'  | 系统镜像的CPU架构                                                                   |
+| package  | string                                                                                                                                         | true     | -         | 此模拟器的系统镜像的路径（例如 'system-images;android-19;google_apis;x86'）。       |
+| name     | string                                                                                                                                         | false    | -         | 新模拟器的名称。                                                                    |
+| force    | boolean                                                                                                                                        | false    | -         | 创建虚拟设备（覆盖现有的模拟器）。                                                  |
+
+- 如果你传了`package`，则参数`apiLevel`，`target`，`arch`将被会略。如果你没有传参`package`，则`apiLevel`参数是必须的。
 
 ### hasAVD
 

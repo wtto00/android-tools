@@ -7,7 +7,7 @@ import {
   spawnExec,
   spawnWaitFor
 } from './util.js';
-import { EmulatorOptions } from './emulator.js';
+import { Arch, EmulatorOptions, SystemImageTarget } from './emulator.js';
 
 export interface AndroidOptions {
   /** The location of the `adb` executable file relative to `ANDROID_HOME` */
@@ -23,43 +23,18 @@ export interface AndroidOptions {
 export type AndroidExecBin = 'adbBin' | 'avdmanagerBin' | 'sdkmanagerBin' | 'emulatorBin';
 
 export interface CreateAVDOptions {
-  /** Path to a shared SD card image, or size of a new sdcard for the new AVD. */
-  sdcard?: string;
-  /**
-   * The sys-img tag to use for the AVD. The default is to
-   * auto-select if the platform has only one tag for its system
-   * images.
-   */
-  tag?: string;
-  /** Directory where the new AVD will be created. */
-  path?: string;
-  /**
-   * Package path of the system image for this AVD (e.g.
-   * 'system-images;android-19;google_apis;x86').
-   */
-  package: string;
-  /**
-   * Name of the new AVD. [required]
-   */
+  /** API level of the platform system image */
+  apiLevel?: number;
+  /** Target of the system image */
+  target?: SystemImageTarget;
+  /** CPU architecture of the system image */
+  arch?: Arch;
+  /** Name of AVD */
   name: string;
-  /**
-   * The optional name of a skin to use with this device.
-   */
-  skin?: string;
-  /**
-   * Forces creation (overwrites an existing AVD)
-   */
+  /** Forces creation (overwrites an existing AVD) */
   force?: boolean;
-  /**
-   * The ABI to use for the AVD. The default is to auto-select the
-   * ABI if the platform has only one ABI for its system images.
-   */
-  abi?: string;
-  /**
-   * The optional device definition to use. Can be a device index
-   * or id.
-   */
-  device?: string;
+  /** Package path of the system image for this AVD (e.g. 'system-images;android-19;google_apis;x86'). */
+  package?: string;
 }
 
 export interface Device {
@@ -240,18 +215,18 @@ class Android {
    * @param name name of AVD
    */
   async createAVD(options: CreateAVDOptions) {
-    if (options.package) {
-      // Downloading the SDK takes a lot of time, so it's best to download it in advance.
-      await this.sdkmanager(`--install ${options.package}`, 600000);
-    }
-    const cmdParams = Object.keys(options).reduce((prev, curr) => {
-      const val = options[curr as keyof CreateAVDOptions];
-      if (typeof val === 'boolean') {
-        if (val) return `${prev} --${curr}`;
-        else return prev;
-      }
-      return `${prev} --${curr} ${val}`;
-    }, '');
+    if (!options.name) return Promise.reject(Error('Missing name parameter.'));
+    if (!options.package && !options.apiLevel)
+      return Promise.reject(Error('Either the parameter "package" or "apiLevel" must be present.'));
+    const systemImage =
+      options.package ||
+      `system-images;android-${options.apiLevel};${options.target || SystemImageTarget.DEFAULT};${
+        options.arch || Arch.X86_64
+      }`;
+    // Downloading the SDK takes a lot of time, so it's best to download it in advance.
+    await this.sdkmanager(`--install ${systemImage}`, 600000);
+    let cmdParams = `-n ${options.name} -k ${systemImage}`;
+    if (options.force) cmdParams += ' -f';
     return await this.avdmanager(`-s create avd ${cmdParams}`);
   }
 
