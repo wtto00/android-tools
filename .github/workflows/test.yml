@@ -66,10 +66,13 @@ jobs:
       - name: Setup Android SDK
         uses: amyu/setup-android@v3.1
 
-      - name: Run some command
+      - name: Download Emulator
         run: |
-          ls "$ANDROID_HOME"
-          which emulator
+          URL=https://dl.google.com/android/repository/emulator-linux_x64-10410302.zip
+          TARGET_DIR=~/.android/sdk
+          mkdir -p $TARGET_DIR
+          curl -L $URL -o emulator.zip
+          unzip emulator.zip -d $TARGET_DIR
 
       - name: Enable KVM group perms
         run: |
