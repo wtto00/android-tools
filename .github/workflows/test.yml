@@ -32,9 +32,6 @@ jobs:
   Test:
     runs-on: macos-latest
     needs: Lint
-    strategy:
-      matrix:
-        node: [20]
     env:
       GITHUB_CI: true
     steps:
@@ -50,7 +47,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 20
           cache: 'pnpm'
 
       - name: Install Dependencies
