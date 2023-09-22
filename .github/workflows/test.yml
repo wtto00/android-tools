@@ -29,9 +29,8 @@ jobs:
       - name: Run Lint
         run: npm run lint
 
-        # runs-on: macos-latest
   Test:
-    runs-on: ubuntu-latest-4-cores
+    runs-on: macos-latest
     needs: Lint
     strategy:
       matrix:
@@ -39,12 +38,6 @@ jobs:
     env:
       GITHUB_CI: true
     steps:
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
       - name: Checkout Code
         uses: actions/checkout@v3
 
@@ -71,20 +64,6 @@ jobs:
 
       - name: Setup Android SDK
         uses: amyu/setup-android@v3.1
-
-      - name: Download Emulator
-        run: |
-          URL=https://dl.google.com/android/repository/emulator-linux_x64-10410302.zip
-          TARGET_DIR=~/.android/sdk
-          mkdir -p $TARGET_DIR
-          curl -L $URL -o emulator.zip
-          unzip emulator.zip -d $TARGET_DIR
-
-      # - name: Enable KVM group perms
-      #   run: |
-      #     echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-      #     sudo udevadm control --reload-rules
-      #     sudo udevadm trigger --name-match=kvm
 
       - name: Run tests 👩🏽‍💻
         run: npm run test
