@@ -5,7 +5,7 @@ describe('emulator AVD', () => {
 
   test('create AVD', async () => {
     const avdName = `TestCreate_${Math.random()}`;
-    const images = (await android.listInstalledImages()).filter((item) => item.vendor === 'default');
+    const images = (await android.listInstalledImages()).filter((item) => item.target === 'default');
     if (images.length === 0) return;
     await android.createAVD({ name: avdName, package: images[images.length - 1].name, force: false });
     const res = await android.hasAVD(avdName);
@@ -16,7 +16,7 @@ describe('emulator AVD', () => {
   test('create an existing AVD', async () => {
     const avds = await android.listAVDs();
     if (avds.length === 0) return;
-    const images = (await android.listInstalledImages()).filter((item) => item.vendor === 'default');
+    const images = (await android.listInstalledImages()).filter((item) => item.target === 'default');
     if (images.length === 0) return;
     await expect(async () => {
       await android.createAVD({ name: avds[0].Name, package: images[images.length - 1].name });
@@ -26,7 +26,7 @@ describe('emulator AVD', () => {
   test('force create an existing AVD', async () => {
     const avds = await android.listAVDs();
     if (avds.length === 0) return;
-    const images = (await android.listInstalledImages()).filter((item) => item.vendor === 'default');
+    const images = (await android.listInstalledImages()).filter((item) => item.target === 'default');
     if (images.length === 0) return;
     await android.createAVD({ name: avds[0].Name, package: images[images.length - 1].name, force: true });
     const res = await android.hasAVD(avds[0].Name);
