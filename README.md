@@ -1,6 +1,6 @@
 # android-tools
 
-[![Test](https://github.com/wtto00/android-tools/actions/workflows/test.yml/badge.svg)](https://github.com/wtto00/android-tools/actions/workflows/test.yml)
+[![Test](https://github.com/wtto00/android-tools/actions/workflows/test-publish.yml/badge.svg)](https://github.com/wtto00/android-tools/actions/workflows/test-publish.yml)
 
 Node module for managing and controlling the Android Devices.
 

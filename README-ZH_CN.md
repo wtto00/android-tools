@@ -1,6 +1,6 @@
 # android-tools
 
-[![Test](https://github.com/wtto00/android-tools/actions/workflows/test.yml/badge.svg)](https://github.com/wtto00/android-tools/actions/workflows/test.yml)
+[![Test](https://github.com/wtto00/android-tools/actions/workflows/test-publish.yml/badge.svg)](https://github.com/wtto00/android-tools/actions/workflows/test-publish.yml)
 
 使用 Nodejs 控制管理 Andorid 设备。
 
