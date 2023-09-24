@@ -21,6 +21,9 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/prefer-nullish-coalescing": "off"
+    "@typescript-eslint/prefer-nullish-coalescing": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off"
   }
 }

@@ -45,24 +45,18 @@ export interface EmulatorOptions {
   noAccel?: boolean;
 }
 
-export enum SystemImageTarget {
-  DEFAULT = 'default',
-  GOOGLE_APIS = 'google_apis',
-  PLAYSTORE = 'playstore',
-  ANDROID_WEAR = 'android-wear',
-  android_wear_cn = 'android-wear-cn',
-  android_tv = 'android-tv',
-  google_tv = 'google-tv',
-  AOSP_ATD = 'aosp_atd',
-  GOOGLE_ATD = 'google_atd'
-}
+export type SystemImageTarget =
+  | 'default'
+  | 'google_apis'
+  | 'playstore'
+  | 'android-wear'
+  | 'android-wear-cn'
+  | 'android-tv'
+  | 'google-tv'
+  | 'aosp_atd'
+  | 'google_atd';
 
-export enum Arch {
-  X86 = 'x86',
-  X86_64 = 'x86_64',
-  ARM64_V8A = 'arm64-v8a',
-  ARMEABI_V7A = 'armeabi-v7a'
-}
+export type Arch = 'x86' | 'x86_64' | 'arm64-v8a' | 'armeabi-v7a';
 
 /**
  * Use -camera-back <mode> to control emulation of a camera facing back.
@@ -92,42 +86,14 @@ export type CameraFront = 'emulated' | 'none' | (string & {});
  * The 'auto' mode is the default. In this mode, the hw.gpu.enabled setting
  * in the AVD's hardware-qemu.ini file will determine whether GPU emulation
  * is enabled.
+ * @value **auto** Auto-select the renderer.
+ * @value **auto-no-window** Auto-select the renderer when running headless. This will use the same gpu selection mechanism as running without the "-no-window" flag and the "-gpu auto" option. See auto for details on the behavior.
+ * @value **host** Use the host system's OpenGL driver.
+ * @value **swiftshader_indirect** Use SwiftShader software renderer on the host, which can be beneficial if you are experiencing issues with your GPU drivers or need to run on systems without GPUs.
+ * @value **angle_indirect** Use ANGLE, an OpenGL ES to D3D11 renderer (Windows 7 SP1 + Platform update, Windows 8.1+, or Windows 10 only).
+ * @value **guest** Use guest-side software rendering. For advanced users only. Warning: slow! In API 28 and later, guest rendering is not supported, and will fall back automatically to swiftshader_indirect.
  */
-export enum EmulatorGpu {
-  /** Auto-select the renderer. */
-  AUTO = 'auto',
-  /**
-   * Auto-select the renderer when
-   * running headless. This will use the same
-   * gpu selection mechanism as running without
-   * the "-no-window" flag and the "-gpu auto"
-   * option. See auto for details on the behavior.
-   */
-  AUTO_NO_WINDOW = 'auto-no-window',
-  /** Use the host system's OpenGL driver. */
-  HOST = 'host',
-  /**
-   * Use SwiftShader software renderer on the
-   * host, which can be beneficial if you are
-   * experiencing issues with your GPU drivers
-   * or need to run on systems without GPUs.
-   */
-  SWIFTSHADER_INDIRECT = 'swiftshader_indirect',
-  /**
-   * Use ANGLE, an OpenGL ES to D3D11 renderer
-   * (Windows 7 SP1 + Platform update,
-   * Windows 8.1+, or Windows 10 only).
-   */
-  ANGLE_INDIRECT = 'angle_indirect',
-  /**
-   * Use guest-side software rendering. For
-   * advanced users only. Warning: slow!
-   * In API 28 and later, guest rendering
-   * is not supported, and will fall back
-   * automatically to swiftshader_indirect.
-   */
-  GUEST = 'guest'
-}
+export type EmulatorGpu = 'auto' | 'auto-no-window' | 'host' | 'swiftshader_indirect' | 'angle_indirect' | 'guest';
 
 /**
  * Android Emulator usage: emulator [options] [-qemu args]

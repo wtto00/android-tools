@@ -134,14 +134,14 @@ android
   });
 ```
 
-| field    | type                                                                                                                                           | required | default   | note                                                                                             |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | ------------------------------------------------------------------------------------------------ |
-| apiLevel | number                                                                                                                                         | false    | -         | API level of the platform system image - e.g. 23 for Android Marshmallow, 29 for Android 10.     |
-| target   | 'default'<br>'google_apis'<br>'playstore'<br>'android-wear'<br>'android-wear-cn'<br>'android-tv'<br>'google-tv'<br>'aosp_atd '<br>'google_atd' | false    | 'default' | Target of the system image .                                                                     |
-| arch     | 'x86_64'<br>'x86'<br>'arm64-v8a'<br>'armeabi-v7a'                                                                                              | false    | 'x86_64'  | CPU architecture of the system image                                                             |
-| package  | string                                                                                                                                         | false    | -         | Package path of the system image for this AVD (e.g. 'system-images;android-19;google_apis;x86'). |
-| name     | string                                                                                                                                         | false    | -         | Name of the new AVD.                                                                             |
-| force    | boolean                                                                                                                                        | false    | -         | Forces creation (overwrites an existing AVD)                                                     |
+| field    | type                                                                                                                                           | required | default                         | note                                                                                             |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------- | ------------------------------------------------------------------------------------------------ |
+| apiLevel | number                                                                                                                                         | false    | -                               | API level of the platform system image - e.g. 23 for Android Marshmallow, 29 for Android 10.     |
+| target   | 'default'<br>'google_apis'<br>'playstore'<br>'android-wear'<br>'android-wear-cn'<br>'android-tv'<br>'google-tv'<br>'aosp_atd '<br>'google_atd' | false    | 'default'                       | Target of the system image .                                                                     |
+| arch     | 'x86_64'<br>'x86'<br>'arm64-v8a'<br>'armeabi-v7a'                                                                                              | false    | Current system CPU architecture | CPU architecture of the system image                                                             |
+| package  | string                                                                                                                                         | false    | -                               | Package path of the system image for this AVD (e.g. 'system-images;android-19;google_apis;x86'). |
+| name     | string                                                                                                                                         | false    | -                               | Name of the new AVD.                                                                             |
+| force    | boolean                                                                                                                                        | false    | -                               | Forces creation (overwrites an existing AVD)                                                     |
 
 - If you pass a `package`, the parameters `apiLevel`, `target`, and `arch` will be ignored. If you don't pass a `package`, the `apiLevel` parameter is required.
 
@@ -361,7 +361,7 @@ android
   .then((res) => {
     res.forEach((item) => {
       console.log(
-        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, vendor: ${item.vendor}, arch: ${item.arch}`
+        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, target: ${item.target}, arch: ${item.arch}`
       );
     });
   })
@@ -380,7 +380,7 @@ android
   .then((res) => {
     res.forEach((item) => {
       console.log(
-        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, vendor: ${item.vendor}, arch: ${item.arch}`
+        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, target: ${item.target}, arch: ${item.arch}`
       );
     });
   })

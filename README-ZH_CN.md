@@ -134,14 +134,14 @@ android
   });
 ```
 
-| field    | type                                                                                                                                           | required | default   | note                                                                                |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------- | ----------------------------------------------------------------------------------- |
-| apiLevel | number                                                                                                                                         | false    | -         | 平台系统镜像的API级别 - 例如，Android Marshmallow的级别为23，Android 10的级别为29。 |
-| target   | 'default'<br>'google_apis'<br>'playstore'<br>'android-wear'<br>'android-wear-cn'<br>'android-tv'<br>'google-tv'<br>'aosp_atd '<br>'google_atd' | false    | 'default' | 系统镜像的目标。                                                                    |
-| arch     | 'x86_64'<br>'x86'<br>'arm64-v8a'<br>'armeabi-v7a'                                                                                              | false    | 'x86_64'  | 系统镜像的CPU架构                                                                   |
-| package  | string                                                                                                                                         | true     | -         | 此模拟器的系统镜像的路径（例如 'system-images;android-19;google_apis;x86'）。       |
-| name     | string                                                                                                                                         | false    | -         | 新模拟器的名称。                                                                    |
-| force    | boolean                                                                                                                                        | false    | -         | 创建虚拟设备（覆盖现有的模拟器）。                                                  |
+| field    | type                                                                                                                                           | required | default         | note                                                                                |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------- | ----------------------------------------------------------------------------------- |
+| apiLevel | number                                                                                                                                         | false    | -               | 平台系统镜像的API级别 - 例如，Android Marshmallow的级别为23，Android 10的级别为29。 |
+| target   | 'default'<br>'google_apis'<br>'playstore'<br>'android-wear'<br>'android-wear-cn'<br>'android-tv'<br>'google-tv'<br>'aosp_atd '<br>'google_atd' | false    | 'default'       | 系统镜像的目标。                                                                    |
+| arch     | 'x86_64'<br>'x86'<br>'arm64-v8a'<br>'armeabi-v7a'                                                                                              | false    | 当前系统CPU架构 | 系统镜像的CPU架构                                                                   |
+| package  | string                                                                                                                                         | true     | -               | 此模拟器的系统镜像的路径（例如 'system-images;android-19;google_apis;x86'）。       |
+| name     | string                                                                                                                                         | false    | -               | 新模拟器的名称。                                                                    |
+| force    | boolean                                                                                                                                        | false    | -               | 创建虚拟设备（覆盖现有的模拟器）。                                                  |
 
 - 如果你传了`package`，则参数`apiLevel`，`target`，`arch`将被会略。如果你没有传参`package`，则`apiLevel`参数是必须的。
 
@@ -361,7 +361,7 @@ android
   .then((res) => {
     res.forEach((item) => {
       console.log(
-        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, vendor: ${item.vendor}, arch: ${item.arch}`
+        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, target: ${item.target}, arch: ${item.arch}`
       );
     });
   })
@@ -380,7 +380,7 @@ android
   .then((res) => {
     res.forEach((item) => {
       console.log(
-        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, vendor: ${item.vendor}, arch: ${item.arch}`
+        `name: ${item.name}, type: ${item.type}, sdk: ${item.sdk}, target: ${item.target}, arch: ${item.arch}`
       );
     });
   })

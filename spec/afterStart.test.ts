@@ -1,6 +1,5 @@
 import path from 'path';
 import Android from '../src/index.js';
-import { EmulatorGpu } from '../src/emulator.js';
 
 const android = new Android();
 
@@ -10,7 +9,7 @@ beforeAll(async () => {
   let avdName = '';
   if (avds.length === 0) {
     avdName = `TestCreate_${Math.random().toString().substring(2)}`;
-    const images = (await android.listImages()).filter((item) => item.vendor === 'default' && item.arch === 'x86_64');
+    const images = (await android.listImages()).filter((item) => item.target === 'default' && item.arch === 'x86_64');
     if (images.length === 0) return;
     await android.createAVD({ name: avdName, apiLevel: 31, force: false });
   } else {
@@ -18,13 +17,12 @@ beforeAll(async () => {
   }
   const res = await android.start({
     avd: avdName,
-    verbose: true,
     noaudio: true,
     noBootAnim: true,
     noSnapshot: true,
     noSnapshotSave: true,
     noWindow: true,
-    gpu: EmulatorGpu.SWIFTSHADER_INDIRECT
+    gpu: 'swiftshader_indirect'
   });
   emulatorId = res.id;
   if (emulatorId) {

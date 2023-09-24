@@ -1,6 +1,7 @@
 import { spawn, spawnSync } from 'node:child_process';
 import type { ChildProcessByStdio, ChildProcessWithoutNullStreams } from 'node:child_process';
 import type internal from 'node:stream';
+import { Arch, SystemImageTarget } from './emulator.js';
 
 export function winBatAdapt(cmd: string) {
   if (process.platform === 'win32' && (cmd.endsWith('sdkmanager') || cmd.endsWith('avdmanager'))) {
@@ -166,18 +167,29 @@ export function processKeyValueGroups<T extends object = object>(str: string) {
 
 export function filterGroupImages(output: string) {
   const lines = output.split('\n');
+  const localArch = getLocalArch();
   return lines
     .map((line) => line.split('|')[0].trim())
     .filter((line) => line.startsWith('system-images;'))
     .map((name) => {
-      const [type, sdk, vendor, arch] = name.split(';');
-      return { name, type, sdk, vendor, arch };
+      const [type, sdk, target, arch] = name.split(';');
+      return { name, type, sdk, target, arch } as {
+        name: string;
+        type: string;
+        sdk: string;
+        target: SystemImageTarget;
+        arch: Arch;
+      };
     })
     .filter((item) => {
-      if (process.arch === 'arm') return item.arch === 'armeabi-v7a';
-      if (process.arch === 'arm64') return item.arch === 'arm64-v8a';
-      if (process.arch === 'ia32') return item.arch === 'x86';
-      if (process.arch === 'x64') return item.arch === 'x86_64';
-      return false;
+      return item.arch === localArch;
     });
+}
+
+export function getLocalArch() {
+  if (process.arch === 'arm') return 'armeabi-v7a';
+  if (process.arch === 'arm64') return 'arm64-v8a';
+  if (process.arch === 'ia32') return 'x86';
+  if (process.arch === 'x64') return 'x86_64';
+  return '';
 }
