@@ -96,6 +96,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: Build
+        run: pnpm build
+
       - run: npm pkg set publishConfig.registry=https://npm.pkg.github.com
       - run: npm publish
         env:
@@ -127,6 +130,9 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        run: pnpm build
 
       - run: git config --global user.name "GitHub CD bot"
       - run: git config --global user.email "github-cd-bot@example.com"

@@ -1,6 +1,6 @@
 {
   "name": "@wtto00/android-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Node module for managing and controlling the Android Devices.",
   "type": "module",
   "main": "dist/lib/index.js",
