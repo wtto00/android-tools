@@ -228,7 +228,7 @@ Install an APK located by absolute URI `apkPath` onto device with `emulatorId`.
 
 ```js
 android
-  .isInstalled('emulator-id', '/path/to/apk')
+  .install('emulator-id', '/path/to/apk', { r: true })
   .then(() => {
     console.log('installed');
   })
@@ -237,10 +237,11 @@ android
   });
 ```
 
-| field      | type   | required | default | note                      |
-| ---------- | ------ | -------- | ------- | ------------------------- |
-| emulatorId | string | true     | -       | ID of emulator device     |
-| apkPath    | string | true     | -       | Absolute path of apk file |
+| field      | type   | required | default | note                                      |
+| ---------- | ------ | -------- | ------- | ----------------------------------------- |
+| emulatorId | string | true     | -       | ID of emulator device                     |
+| apkPath    | string | true     | -       | Absolute path of apk file                 |
+| options    | object | false    | -       | The parameters for "adb install": -lrtsdg |
 
 ### inputKeyEvent
 
