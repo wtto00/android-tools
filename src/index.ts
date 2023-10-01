@@ -216,7 +216,7 @@ class Android {
     await retry(async () => {
       const proc = await this.adb(emulatorId, 'shell getprop sys.boot_completed');
       return proc.output.trim() === '1';
-    }, 100);
+    }, 1200);
   }
 
   /**
@@ -271,7 +271,7 @@ class Android {
       await this.stop(emulatorId);
       const devices = await this.devices();
       return !devices.some((device) => device.name === emulatorId && device.status === 'device');
-    }, 100);
+    }, 1200);
   }
 
   /**
