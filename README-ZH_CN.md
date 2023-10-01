@@ -228,7 +228,7 @@ android
 
 ```js
 android
-  .isInstalled('emulator-id', '/path/to/apk')
+  .install('emulator-id', '/path/to/apk', { r: true })
   .then(() => {
     console.log('installed');
   })
@@ -237,10 +237,11 @@ android
   });
 ```
 
-| field      | type   | required | default | note                   |
-| ---------- | ------ | -------- | ------- | ---------------------- |
-| emulatorId | string | true     | -       | 模拟器设备 ID          |
-| apkPath    | string | true     | -       | apk 安装包所在路径位置 |
+| field      | type   | required | default | note                         |
+| ---------- | ------ | -------- | ------- | ---------------------------- |
+| emulatorId | string | true     | -       | 模拟器设备 ID                |
+| apkPath    | string | true     | -       | apk 安装包所在路径位置       |
+| options    | object | false    | -       | "adb install"的参数：-lrtsdg |
 
 ### inputKeyEvent
 

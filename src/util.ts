@@ -18,7 +18,7 @@ export function transformCommand(command: string) {
 /**
  * Run a shell command.
  */
-export function spawnExec(command: string, timeout = 60000) {
+export function spawnExec(command: string, timeout = 300000) {
   return new Promise<ChildProcessWithoutNullStreams & { output: string }>((resolve, reject) => {
     const { cmd, args } = transformCommand(command);
     const proc = spawn(cmd, args) as ChildProcessWithoutNullStreams & {
@@ -54,7 +54,7 @@ export function spawnExec(command: string, timeout = 60000) {
 /**
  * Execute a shell command synchronously.
  */
-export function spwanSyncExec(command: string, timeout = 60000) {
+export function spwanSyncExec(command: string, timeout = 300000) {
   const { cmd, args } = transformCommand(command);
   const clock = setTimeout(() => {
     throw Error('Execution timeout');
@@ -67,7 +67,7 @@ export function spwanSyncExec(command: string, timeout = 60000) {
 /**
  * Execute a shell command until a matching output is found.
  */
-export function spawnWaitFor(command: string, regex: RegExp, timeout = 120000) {
+export function spawnWaitFor(command: string, regex: RegExp, timeout = 600000) {
   return new Promise<{
     process: ChildProcessByStdio<null, internal.Readable, null>;
     matches: RegExpMatchArray;
@@ -192,4 +192,18 @@ export function getLocalArch() {
   if (process.arch === 'ia32') return 'x86';
   if (process.arch === 'x64') return 'x86_64';
   return '';
+}
+
+export function params2Cmd(options: Record<string, string | number | boolean> = {}) {
+  const opts = [];
+  for (const key in options) {
+    const val = options[key];
+    const cliKey = '-' + key.replace(/[A-Z]/g, (matched) => `-${matched.toLocaleLowerCase()}`);
+    if (val === true) {
+      opts.push(cliKey);
+    } else if (val) {
+      opts.push(cliKey, val);
+    }
+  }
+  return opts.join(' ');
 }

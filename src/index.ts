@@ -3,6 +3,7 @@ import {
   filterGroupImages,
   getLocalArch,
   isExecExpectedResult,
+  params2Cmd,
   processKeyValueGroups,
   retry,
   spawnExec,
@@ -184,19 +185,10 @@ class Android {
    */
   async start(options: Required<Pick<EmulatorOptions, 'avd'>> & Omit<EmulatorOptions, 'avd'>) {
     log('start: %s', JSON.stringify(options));
-    const opts = [];
     options.verbose = true;
-    for (const key in options) {
-      const val = options[key as keyof EmulatorOptions];
-      const cliKey = '-' + key.replace(/[A-Z]/g, (matched) => `-${matched.toLocaleLowerCase()}`);
-      if (val === true) {
-        opts.push(cliKey);
-      } else if (val) {
-        opts.push(cliKey, val);
-      }
-    }
+    const cmd = params2Cmd(options);
     const res = await spawnWaitFor(
-      `${this.emulatorBin} ${opts.join(' ')}`,
+      `${this.emulatorBin} ${cmd}`,
       / control console listening on port (\d+), ADB on port \d+/
     );
     return {
@@ -211,7 +203,7 @@ class Android {
    */
   async waitForDevice(emulatorId: string) {
     log('waitForDevice: %s', JSON.stringify({ emulatorId }));
-    await this.adb(emulatorId, 'wait-for-device', 300000);
+    await this.adb(emulatorId, 'wait-for-device');
   }
 
   /**
@@ -299,9 +291,10 @@ class Android {
    * @param emulatorId id of emulator
    * @param apkPath path of apk file
    */
-  async install(emulatorId: string, apkPath: string) {
+  async install(emulatorId: string, apkPath: string, options?: Record<'l' | 'r' | 't' | 's' | 'd' | 'g', boolean>) {
     log('install: %s, %s', JSON.stringify({ emulatorId, apkPath }));
-    const process = await this.adb(emulatorId, `install ${apkPath}`);
+    const cmdParams = params2Cmd(options);
+    const process = await this.adb(emulatorId, `install ${cmdParams} ${apkPath}`);
     if (process.output.match(/Success/)) return;
     throw new Error('Could not parse output of adb command');
   }
