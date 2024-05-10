@@ -115,6 +115,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
+          registry-url: 'https://registry.npmjs.org/'
 
       - name: Install Dependencies
         run: pnpm install
