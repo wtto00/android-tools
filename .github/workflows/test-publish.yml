@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  Lint:
+  LintCheck:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -32,7 +32,7 @@ jobs:
 
   Test:
     runs-on: macos-latest
-    needs: Lint
+    needs: LintCheck
     env:
       GITHUB_CI: true
     steps:
