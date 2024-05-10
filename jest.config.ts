@@ -12,7 +12,9 @@ const jestConfig: JestConfigWithTsJest = {
     '^(\\.{1,2}/.*)\\.js$': '$1'
   },
   collectCoverage: true,
-  coverageDirectory: 'spec/coverage'
+  coverageDirectory: 'spec/coverage',
+  verbose: true,
+  maxConcurrency: 1
 };
 
 export default jestConfig;
