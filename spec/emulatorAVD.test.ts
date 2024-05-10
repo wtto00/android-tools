@@ -1,7 +1,7 @@
 import Android from '../src/index.js';
 
 describe('emulator AVD', () => {
-  const android = new Android();
+  const android = new Android({ debug: true });
 
   test('create AVD', async () => {
     const avdName = `TestCreate_${Math.random()}`;

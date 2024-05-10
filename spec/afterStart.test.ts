@@ -1,7 +1,7 @@
 import path from 'path';
 import Android from '../src/index.js';
 
-const android = new Android();
+const android = new Android({ debug: true });
 
 let emulatorId = '';
 beforeAll(async () => {
