@@ -5,6 +5,7 @@ const android = new Android({ debug: true });
 
 let emulatorId = '';
 beforeAll(async () => {
+  console.log('start', new Date().toUTCString());
   const avds = await android.listAVDs();
   let avdName = '';
   if (avds.length === 0) {
@@ -13,7 +14,6 @@ beforeAll(async () => {
   } else {
     avdName = avds[0].Name;
   }
-  console.log('start', new Date().toUTCString());
   const res = await android.start({
     avd: avdName,
     noaudio: true,
@@ -29,6 +29,7 @@ beforeAll(async () => {
   } else {
     throw Error('no emulator');
   }
+  console.log('start-end', new Date().toUTCString());
 }, 1200000);
 
 afterAll(async () => {
