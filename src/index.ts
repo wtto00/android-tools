@@ -15,6 +15,7 @@ import Debug from 'debug';
 export * from './util.js';
 export * from './emulator.js';
 
+Debug.enable('android-tools');
 const log = Debug('android-tools');
 
 export interface AndroidOptions {
