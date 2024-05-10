@@ -6,12 +6,15 @@ const android = new Android({ debug: true });
 let emulatorId = '';
 beforeAll(async () => {
   const avds = await android.listAVDs();
+  console.log('avds', avds);
   let avdName = '';
   if (avds.length === 0) {
     avdName = `TestCreate_${Math.random().toString().substring(2)}`;
     const images = (await android.listImages()).filter((item) => item.target === 'default' && item.arch === 'x86_64');
+    console.log('images', images);
     if (images.length === 0) return;
     await android.createAVD({ name: avdName, apiLevel: 31, force: false });
+    console.log('avds', avds);
   } else {
     avdName = avds[0].Name;
   }
