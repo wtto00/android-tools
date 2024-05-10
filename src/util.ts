@@ -93,7 +93,10 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 600000) {
         });
       }
     });
-    proc.on('close', () => {
+    proc.on('close', (code, signal) => {
+      console.log('code,signal', code, signal);
+      console.log('output', output);
+
       clearTimeout(clock);
       reject(Error(output));
     });
