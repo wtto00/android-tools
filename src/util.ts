@@ -140,7 +140,7 @@ export function processKeyValueGroups<T extends object = object>(str: string) {
   const results = [];
 
   lines.forEach(function (line) {
-    const matches = line.match(/([\w/]+):\s(.*)/);
+    const matches = line.match(/(\w+):\s(.*)/);
 
     if (matches === null) {
       return;
