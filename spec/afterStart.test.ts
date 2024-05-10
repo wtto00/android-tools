@@ -1,42 +1,43 @@
 import path from 'path';
 import Android from '../src/index.js';
 
-const android = new Android({ debug: true });
-
-let emulatorId = '';
-beforeAll(async () => {
-  const avds = await android.listAVDs();
-  let avdName = '';
-  if (avds.length === 0) {
-    avdName = `TestCreate_${Math.random().toString().substring(2)}`;
-    await android.createAVD({ name: avdName, apiLevel: 31, force: false });
-  } else {
-    avdName = avds[0].Name;
-  }
-  console.log('start', new Date().toUTCString());
-  const res = await android.start({
-    avd: avdName,
-    noaudio: true,
-    noBootAnim: true,
-    noSnapshot: true,
-    noSnapshotSave: true,
-    noWindow: true,
-    gpu: 'swiftshader_indirect'
-  });
-  emulatorId = res.id;
-  if (emulatorId) {
-    await android.ensureReady(emulatorId);
-  } else {
-    throw Error('no emulator');
-  }
-}, 1200000);
-
-afterAll(async () => {
-  console.log('waitForStop', new Date().toUTCString());
-  await android.waitForStop(emulatorId);
-}, 60000);
-
 describe('after start a emulator', () => {
+  const android = new Android({ debug: true });
+
+  let emulatorId = '';
+  beforeAll(async () => {
+    const avds = await android.listAVDs();
+    let avdName = '';
+    if (avds.length === 0) {
+      avdName = `TestCreate_${Math.random().toString().substring(2)}`;
+      await android.createAVD({ name: avdName, apiLevel: 31, force: false });
+    } else {
+      avdName = avds[0].Name;
+    }
+    console.log('start', new Date().toUTCString());
+    const res = await android.start({
+      avd: avdName,
+      noaudio: true,
+      noBootAnim: true,
+      noSnapshot: true,
+      noSnapshotSave: true,
+      noWindow: true,
+      gpu: 'swiftshader_indirect'
+    });
+    emulatorId = res.id;
+    console.log('emulatorId', emulatorId, new Date().toUTCString());
+    if (emulatorId) {
+      await android.ensureReady(emulatorId);
+    } else {
+      throw Error('no emulator');
+    }
+  }, 1200000);
+
+  afterAll(async () => {
+    console.log('waitForStop', new Date().toUTCString());
+    await android.waitForStop(emulatorId);
+  }, 60000);
+
   test('list packages', async () => {
     console.log('list packages', new Date().toUTCString());
     if (emulatorId) {
