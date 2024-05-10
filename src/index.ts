@@ -15,6 +15,7 @@ import Debug from 'debug';
 export * from './util.js';
 export * from './emulator.js';
 
+Debug.enable('android-tools');
 const log = Debug('android-tools');
 
 export interface AndroidOptions {
@@ -291,7 +292,18 @@ class Android {
    * @param emulatorId id of emulator
    * @param apkPath path of apk file
    */
-  async install(emulatorId: string, apkPath: string, options?: Record<'l' | 'r' | 't' | 's' | 'd' | 'g', boolean>) {
+  async install(
+    emulatorId: string,
+    apkPath: string,
+    options?: {
+      l?: boolean;
+      r?: boolean;
+      t?: boolean;
+      s?: boolean;
+      d?: boolean;
+      g?: boolean;
+    }
+  ) {
     log('install: %s, %s', JSON.stringify({ emulatorId, apkPath }));
     const cmdParams = params2Cmd(options);
     const process = await this.adb(emulatorId, `install ${cmdParams} ${apkPath}`);

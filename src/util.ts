@@ -25,7 +25,6 @@ export function spawnExec(command: string, timeout = 300000) {
       output: string;
     };
     const clock = setTimeout(() => {
-      console.log('timeout', timeout, command);
       proc.kill();
       reject(Error('Execution timeout'));
     }, timeout);

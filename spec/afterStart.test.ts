@@ -1,7 +1,7 @@
 import path from 'path';
 import Android from '../src/index.js';
 
-const android = new Android();
+const android = new Android({ debug: true });
 
 let emulatorId = '';
 beforeAll(async () => {
@@ -9,8 +9,6 @@ beforeAll(async () => {
   let avdName = '';
   if (avds.length === 0) {
     avdName = `TestCreate_${Math.random().toString().substring(2)}`;
-    const images = (await android.listImages()).filter((item) => item.target === 'default' && item.arch === 'x86_64');
-    if (images.length === 0) return;
     await android.createAVD({ name: avdName, apiLevel: 31, force: false });
   } else {
     avdName = avds[0].Name;
@@ -27,6 +25,8 @@ beforeAll(async () => {
   emulatorId = res.id;
   if (emulatorId) {
     await android.ensureReady(emulatorId);
+  } else {
+    throw Error('no emulator');
   }
 }, 1200000);
 
