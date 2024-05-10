@@ -83,6 +83,7 @@ jobs:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Install Dependencies
         run: pnpm install
@@ -90,7 +91,6 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - run: npm pkg set publishConfig.registry=https://npm.pkg.github.com
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
