@@ -30,12 +30,12 @@ export function spawnExec(command: string, timeout = 300000) {
     }, timeout);
     let output = '';
     proc.stdout.setEncoding('utf8');
-    proc.stdout.on('data', (data) => {
+    proc.stdout.on('data', (data: string) => {
       output += data;
     });
     let error = '';
     proc.stderr.setEncoding('utf8');
-    proc.stderr.on('data', (err) => {
+    proc.stderr.on('data', (err: string) => {
       error += err;
     });
     proc.on('close', (code) => {

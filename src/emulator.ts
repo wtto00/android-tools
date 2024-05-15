@@ -66,7 +66,8 @@ export type Arch = 'x86' | 'x86_64' | 'arm64-v8a' | 'armeabi-v7a';
  * @value __none__ camera emulation will be disabled
  * @value __webcam\<N>__ camera will be emulated using a webcamera connected to the host
  */
-export type CameraBack = 'emulated' | 'virtualscene' | 'videoplayback' | 'none' | (string & {});
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+export type CameraBack = 'emulated' | 'virtualscene' | 'videoplayback' | 'none' | (string & object);
 
 /**
  * Use -camera-front <mode> to control emulation of a camera facing front.
@@ -74,7 +75,8 @@ export type CameraBack = 'emulated' | 'virtualscene' | 'videoplayback' | 'none' 
  * @value __webcam\<N>__ camera will be emulated using a webcamera connected to the host
  * @value __none__ camera emulation will be disabled
  */
-export type CameraFront = 'emulated' | 'none' | (string & {});
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
+export type CameraFront = 'emulated' | 'none' | (string & object);
 
 /**
  * Use -gpu <mode> to override the mode of hardware OpenGL ES emulation
