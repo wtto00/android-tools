@@ -232,7 +232,7 @@ class Android {
       return Promise.reject(Error('Either the parameter "package" or "apiLevel" must be present.'));
     const systemImage =
       options.package ||
-      `system-images;android-${options.apiLevel};${options.target || 'default'};${options.arch || getLocalArch()}`;
+      `system-images;android-${options.apiLevel!};${options.target || 'default'};${options.arch || getLocalArch()}`;
     // Downloading the SDK takes a lot of time, so it's best to download it in advance.
     await this.sdkmanager(`--install ${systemImage}`, 600000);
     let cmdParams = `-n ${options.name} -k ${systemImage}`;
@@ -318,7 +318,7 @@ class Android {
    */
   async inputKeyEvent(emulatorId: string, key: number) {
     log('inputKeyEvent: %s, %d', JSON.stringify({ emulatorId, key }));
-    return await this.adb(emulatorId, 'shell input keyevent ' + key);
+    return await this.adb(emulatorId, `shell input keyevent ${key}`);
   }
 
   /**
