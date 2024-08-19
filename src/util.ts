@@ -108,7 +108,7 @@ export function isExecExpectedResult(cmd: string, regex: RegExp) {
   try {
     const res = spwanSyncExec(cmd);
     return regex.test(res);
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }

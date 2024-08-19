@@ -5,11 +5,21 @@ import tseslint from 'typescript-eslint';
 export default [
   { ignores: ['**/spec/coverage/**/*', '**/dist/**/*'] },
   { languageOptions: { globals: globals.node } },
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   { ...pluginJs.configs.recommended },
-
-  ...tseslint.config({
-    extends: tseslint.configs.recommendedTypeChecked,
-    languageOptions: { parserOptions: { project: true } }
-  })
+  ...tseslint.configs.recommendedTypeChecked,
+  {
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigDirName: import.meta.dirname
+      }
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }]
+    }
+  },
+  {
+    files: ['**/*.js', '**/*.mjs'],
+    ...tseslint.configs.disableTypeChecked
+  }
 ];
