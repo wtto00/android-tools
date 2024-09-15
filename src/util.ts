@@ -21,7 +21,7 @@ export function transformCommand(command: string) {
 export function spawnExec(command: string, timeout = 300000) {
   return new Promise<ChildProcessWithoutNullStreams & { output: string }>((resolve, reject) => {
     const { cmd, args } = transformCommand(command);
-    const proc = spawn(cmd, args) as ChildProcessWithoutNullStreams & {
+    const proc = spawn(cmd, args, { shell: true }) as ChildProcessWithoutNullStreams & {
       output: string;
     };
     const clock = setTimeout(() => {
@@ -58,9 +58,9 @@ export function spwanSyncExec(command: string, timeout = 300000) {
   const clock = setTimeout(() => {
     throw Error('Execution timeout');
   }, timeout);
-  const res = spawnSync(cmd, args, { encoding: 'utf8' });
+  const res = spawnSync(cmd, args, { encoding: 'utf8', shell: true });
   clearTimeout(clock);
-  return res.output.find((item) => item) ?? '';
+  return res.output?.find((item) => item) ?? '';
 }
 
 /**
@@ -73,7 +73,7 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 600000) {
     line: string;
   }>((resolve, reject) => {
     const { cmd, args } = transformCommand(command);
-    const proc = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'ignore'] });
+    const proc = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'ignore'], shell: true });
     const clock = setTimeout(() => {
       proc.kill();
       reject(Error('Execution timeout'));
