@@ -12,7 +12,8 @@ export function winBatAdapt(cmd: string) {
 
 export function transformCommand(command: string) {
   const [cmd, ...args] = command.split(' ');
-  return { cmd: winBatAdapt(cmd), args: args.filter((arg) => arg) };
+  const winCmd = winBatAdapt(cmd);
+  return { cmd: winCmd, args: args.filter((arg) => arg), options: winCmd.endsWith('.bat') ? { shell: true } : {} };
 }
 
 /**
@@ -20,8 +21,8 @@ export function transformCommand(command: string) {
  */
 export function spawnExec(command: string, timeout = 300000) {
   return new Promise<ChildProcessWithoutNullStreams & { output: string }>((resolve, reject) => {
-    const { cmd, args } = transformCommand(command);
-    const proc = spawn(cmd, args) as ChildProcessWithoutNullStreams & {
+    const { cmd, args, options } = transformCommand(command);
+    const proc = spawn(cmd, args, options) as ChildProcessWithoutNullStreams & {
       output: string;
     };
     const clock = setTimeout(() => {
@@ -54,13 +55,13 @@ export function spawnExec(command: string, timeout = 300000) {
  * Execute a shell command synchronously.
  */
 export function spwanSyncExec(command: string, timeout = 300000) {
-  const { cmd, args } = transformCommand(command);
+  const { cmd, args, options } = transformCommand(command);
   const clock = setTimeout(() => {
     throw Error('Execution timeout');
   }, timeout);
-  const res = spawnSync(cmd, args, { encoding: 'utf8' });
+  const res = spawnSync(cmd, args, { encoding: 'utf8', ...options });
   clearTimeout(clock);
-  return res.output.find((item) => item) ?? '';
+  return res.output?.find((item) => item) ?? '';
 }
 
 /**
@@ -72,8 +73,8 @@ export function spawnWaitFor(command: string, regex: RegExp, timeout = 600000) {
     matches: RegExpMatchArray;
     line: string;
   }>((resolve, reject) => {
-    const { cmd, args } = transformCommand(command);
-    const proc = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'ignore'] });
+    const { cmd, args, options } = transformCommand(command);
+    const proc = spawn(cmd, args, { stdio: ['ignore', 'pipe', 'ignore'], ...options });
     const clock = setTimeout(() => {
       proc.kill();
       reject(Error('Execution timeout'));
